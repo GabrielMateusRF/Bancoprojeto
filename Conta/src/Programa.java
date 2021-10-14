@@ -49,12 +49,15 @@ public class Programa {
 		System.out.println("Agradecemos a escolha de criar uma conta conosco.");	
 	}
 	
-	/*public static int acharConta(Conta Cconta[], String conta) {
+	public static int acharConta(Conta Cconta[], int numConta, int i) {
 		int a;
-		for(a=0; Cconta[a]!=\null; a++) {
-			
+		for(a=0; a<i; a++) {
+			if(Cconta[a].getNumeroConta()==numConta) {
+				return a;
+			}
 		}
-	}*/
+		return 99;
+	}
 	
 	public static void criarContaC(Conta Cconta, int i) {///Cria conta Corrente
 		Scanner input = new Scanner(System.in);
@@ -186,6 +189,7 @@ public class Programa {
 							case 2:///Aplicar dinheiro
 								System.out.println("Digite no número da conta na qual deseja aplicar dinheiro:");
 								key=input.nextInt();
+								key=acharConta(Cconta, key, i);
 								break;
 							case 3:///Retirar Dinheiro
 								break;
