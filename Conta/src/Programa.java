@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Programa {
 	
-	public static int contagerente(){
+	public static int contaGerente(){
 		Scanner input = new Scanner(System.in);
 		System.out.println("Selecione o modo: ");
 		System.out.println("1. Criar Conta");
@@ -11,6 +11,29 @@ public class Programa {
 		System.out.println("0. Voltar");
 		return input.nextInt();
 	}
+	
+	public static int contaCliente(){
+		Scanner input = new Scanner(System.in);
+		System.out.println("Selecione o modo: ");
+		System.out.println("1. Abrir Conta");
+		System.out.println("2. Aplicar Dinheiro");
+		System.out.println("3. Retirar Dinheiro");
+		System.out.println("4. Saldo");
+		System.out.println("5. Verificar Extratos");
+		System.out.println("6. Alterar senha");
+		System.out.println("0. Voltar");
+		return input.nextInt();
+	}
+	
+	public static int mensagemCriarConta() {
+		Scanner input = new Scanner(System.in);
+		System.out.println("Que tipo de conta deseja criar?");
+		System.out.println("1. Corrente");
+		System.out.println("2. Poupança");
+		System.out.println("3. Especial");
+		return input.nextInt();
+	}
+
 
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
@@ -33,7 +56,7 @@ public class Programa {
 				System.out.println("Numero digitado inválido");
 			}
 		}while((key<0)||(key>2));
-		
+		Conta[] Cconta = new Conta[10];
 		
 		switch(key) {
 		case 1:
@@ -49,16 +72,18 @@ public class Programa {
 				System.out.println("Senha errada");
 				break;
 			}
-			Conta[] Cconta = new Conta[10];
+			
 			
 			System.out.println("Conta Gerente");
-			key=contagerente();
+			key=contaGerente();
+			
+			
+			break;
+		case 2:
+			System.out.println("Conta Cliente");
+			key=contaCliente();
 			if(key==1) {
-				System.out.println("Que tipo de conta deseja criar?");
-				System.out.println("1. Corrente");
-				System.out.println("2. Poupança");
-				System.out.println("3. Especial");
-				escolha=input.nextInt();
+				escolha=mensagemCriarConta();
 				if(escolha==1) {///Corrente
 					Cconta[i] = new Corrente();
 					System.out.print("Digite o nome do novo cliente: ");
@@ -116,15 +141,13 @@ public class Programa {
 				}
 			}else
 				if(key==2){
-					System.out.println("Digite no número da conta");
+					System.out.println("Digite no número da conta na qual deseja aplicar dinheiro:");
 					numconta=input.nextInt();
 					
 					
 				}
 			
-			break;
-		case 2:
-			System.out.println("Conta Cliente");
+			
 			break;
 		default:
 			break;
