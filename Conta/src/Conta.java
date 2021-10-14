@@ -4,7 +4,7 @@ public abstract class Conta {
 	private String nome;
 	private int numConta;
 	public double saldo=0;
-	private String senha;
+	private String senha="default";
 	
 	
 	
@@ -54,18 +54,19 @@ public abstract class Conta {
 	
 	public void depositar (double valor)///deposita
 	{
-		saldo=valor;
+		saldo+=valor;
 		System.out.printf("\n Depositado com sucesso!\n");
 	}
 	
 	public void alterarSenha (String senhaAntiga, String senhaNova) 
 	{
-		if(senhaAntiga==senha)
+		if(senhaAntiga.equals(senha))
 		{
-			senha=senhaNova;
-			if (senhaAntiga!=null){
+			if(!senha.equals("default")) {
 				System.out.printf("\n Senha alterada com sucesso\n");
 			}
+			senha=senhaNova;
+			
 			
 		}else
 		{

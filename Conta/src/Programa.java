@@ -14,8 +14,14 @@ public class Programa {
 	public static int contaGerente(){
 		Scanner input = new Scanner(System.in);
 		System.out.println("Selecione o modo: ");
-		System.out.println("1. Criar Conta");
+		System.out.println("1. Verificar o nome de seus clientes e quais são suas respectivas contas");
 		System.out.println("2. Visualizar informções da conta");
+		System.out.println("3. Faz uma aplicação de dinheiro para um cliente específico");
+		System.out.println("4. Faz transferência de dinheiro entre contas específicas de clientes diferentes");
+		System.out.println("5. Faz retiradas maiores de R$ 110.000,00 de contas de seus clientes");
+		System.out.println("6. Cadastra/Edita os limites de retiradas negativas e também da taxa de juros da poupança");
+		System.out.println("7. Cadastrar outros usuários (gerentes e clientes)");
+		System.out.println("8. Alterar senha");
 		System.out.println("0. Voltar");
 		return input.nextInt();
 	}
@@ -49,7 +55,7 @@ public class Programa {
 		System.out.println("Agradecemos a escolha de criar uma conta conosco.");	
 	}
 	
-	public static int acharConta(Conta Cconta[], int numConta, int i) {
+	public static int acharConta(Conta Cconta[], int numConta, int i) {///funcao generica que devolve a posicao vetorial da conta
 		int a;
 		for(a=0; a<i; a++) {
 			if(Cconta[a].getNumeroConta()==numConta) {
@@ -74,7 +80,7 @@ public class Programa {
 			}
 		}while(!senhatemp.equals(senha));
 		Cconta.setNumeroConta(i+100);
-		Cconta.alterarSenha(null, senha);
+		Cconta.alterarSenha("default", senha);
 	}
 
 	public static void criarContaP(Conta Cconta, int i) {///Cria conta Poupanca
@@ -93,7 +99,7 @@ public class Programa {
 			}
 		}while(!senhatemp.equals(senha));
 		Cconta.setNumeroConta(i+200);
-		Cconta.alterarSenha(null, senha);
+		Cconta.alterarSenha("default", senha);
 		System.out.printf("Digite a taxa de juros: ");
 		jurosoulimite=input.nextInt();
 		((Poupanca) Cconta).setJuros(jurosoulimite);
@@ -117,21 +123,74 @@ public class Programa {
 			}
 		}while(!senhatemp.equals(senha));
 		Cconta.setNumeroConta(i+200);
-		Cconta.alterarSenha(null, senha);
+		Cconta.alterarSenha("default", senha);
 		System.out.printf("Digite o limite: ");
 		jurosoulimite=input.nextInt();
 		((Especial) Cconta).setLimite(jurosoulimite);
 	}
 	
+	
+	public static void aplicarDinheiro(Conta Cconta) {///Em banco para inserir dinheiro nao precisa de senha, certo?
+		Scanner input = new Scanner(System.in);
+		System.out.printf("Conta numero: %d \nCliente: %s\nDigite o valor inserido: ", Cconta.getNumeroConta(), Cconta.getNome());
+		Cconta.depositar(input.nextDouble());
+		System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
+	}
+	
+	public static void retirarDinheiro(Conta Cconta) {///Precisa de senha
+		String senha;
+		Scanner input = new Scanner(System.in);
+		System.out.printf("Conta numero: %d \nCliente: %s\nDigite a senha: ", Cconta.getNumeroConta(), Cconta.getNome());
+		senha=input.next();
+		if(Cconta.conferirSenha(senha)==1) {
+			System.out.printf("Quando deseja sacar?: ");
+			((Corrente) Cconta).sacar(input.nextFloat());
+			System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
+		}else {
+			System.out.println("SENHA ERRADA");
+		}
+	}
+	
+	public static void consultarSaldo(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
+		String senha;
+		Scanner input = new Scanner(System.in);
+		System.out.printf("Conta numero: %d \nCliente: %s\nDigite a senha: ", Cconta.getNumeroConta(), Cconta.getNome());
+		senha=input.next();
+		if(Cconta.conferirSenha(senha)==1) {
+
+			System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
+		}else {
+			System.out.println("SENHA ERRADA");
+		}
+	}
+	
+	
+	public static void mudarSenha(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
+		String senha, senhaNova;
+		Scanner input = new Scanner(System.in);
+		System.out.printf("Conta numero: %d \nCliente: %s\nDigite a senha: ", Cconta.getNumeroConta(), Cconta.getNome());
+		senha=input.next();
+		if(Cconta.conferirSenha(senha)==1) {
+			System.out.printf("Digite a nova senha: ");
+			senhaNova=input.next();
+			Cconta.alterarSenha(senha, senhaNova);
+		}else {
+			System.out.println("SENHA ERRADA");
+		}
+	}
+	
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
-		int mkey, key, loop, escolha, numconta, jurosoulimite, i=0;
+		int mkey, key, loop, escolha, numconta, jurosoulimite, i=0, ig=1, contaGerenteAtiva;
 		String senha, senhatemp;
-		Contagerente Contag = new Contagerente();
-		
-		Contag.setNumeroConta(401);
-		Contag.alterarSenha(null, "401");
+		Contagerente[] Contag = new Contagerente[10];
 		Conta[] Cconta = new Conta[10];
+		
+		//gerente default
+		Contag[0] = new Contagerente();
+		Contag[0].setNumeroConta(401);
+		Contag[0].alterarSenha("default", "401");
+		
 		do {	
 			do {
 				mkey = selecModo();
@@ -143,21 +202,48 @@ public class Programa {
 			
 			
 			if(mkey==1) {
-				System.out.printf("Digite numero da conta: ");
+				System.out.printf("Digite no número da conta Gerente:");
 				key=input.nextInt();
-				if(key!=Contag.getNumeroConta()) {
-					System.out.println("Conta Nao gerente");
-		
+				contaGerenteAtiva=acharConta(Contag, key, ig);
+				if(contaGerenteAtiva==99) {
+					System.out.println("Conta Gerente não encontrada");
+					
+				}else {
+					System.out.printf("Digite a senha da conta: ");
+					senha=input.next();
+					if(Contag[contaGerenteAtiva].conferirSenha(senha)==0) {
+						System.out.println("Senha errada");
+					}
+					else {
+						do {
+							System.out.println("Conta Gerente");
+							loop=contaGerente();
+							switch(loop) {
+							case 1:
+								break;
+							case 2:
+								break;
+							case 3:
+								break;
+							case 4:
+								break;
+							case 5:
+								break;
+							case 6:///Cadastrar/editar limites
+								break;
+							case 7:///cadastrar outros usuarios 
+								break;
+							case 8:///mudar senha
+								mudarSenha(Contag[contaGerenteAtiva]);
+								break;
+							}
+							
+						}while(loop!=0);
+					}
+					
 				}
-				System.out.printf("Digite a senha da conta: ");
-				senha=input.next();
-				if(Contag.conferirSenha(senha)==0) {
-					System.out.println("Senha errada");
-				}
-				else {
-					System.out.println("Conta Gerente");
-					key=contaGerente();
-				}
+				
+				
 				
 			}
 				else {
@@ -166,7 +252,7 @@ public class Programa {
 						System.out.println("Conta Cliente");
 						loop=contaCliente();
 						switch (loop) {
-							case 1:
+							case 1:///criar conta OK
 							escolha=mensagemCriarConta();
 							if(escolha==1) {///Corrente
 								Cconta[i] = new Corrente();
@@ -186,18 +272,47 @@ public class Programa {
 							
 							
 							break;
-							case 2:///Aplicar dinheiro
-								System.out.println("Digite no número da conta na qual deseja aplicar dinheiro:");
+							case 2:///Aplicar dinheiro OK
+								System.out.printf("Digite no número da conta na qual deseja aplicar dinheiro:");
 								key=input.nextInt();
 								key=acharConta(Cconta, key, i);
+								if(key!=99) {
+									aplicarDinheiro(Cconta[key]);
+								}else {
+									System.out.println("Conta não encontrada");
+								}
 								break;
-							case 3:///Retirar Dinheiro
+							case 3:///Retirar Dinheiro NÃO FINALIZADO, FALTA CARA CARACTERISTICA
+								System.out.printf("Digite no número da conta na qual deseja retirar dinheiro:");
+								key=input.nextInt();
+								key=acharConta(Cconta, key, i);
+								if(key!=99) {
+									retirarDinheiro(Cconta[key]);
+								}else {
+									System.out.println("Conta não encontrada");
+								}
 								break;
-							case 4:///Saldo
+							case 4:///Saldo OK
+								System.out.printf("Digite no número da conta na qual deseja Consultar o saldo:");
+								key=input.nextInt();
+								key=acharConta(Cconta, key, i);
+								if(key!=99) {
+									consultarSaldo(Cconta[key]);
+								}else {
+									System.out.println("Conta não encontrada");
+								}
 								break;
-							case 5:///verificar extratos
+							case 5:///verificar extratos NÃO FEITO
 								break;
-							case 6:///alterar senha
+							case 6:///alterar senha OK
+								System.out.printf("Digite no número da conta na qual deseja Mudar a senha:");
+								key=input.nextInt();
+								key=acharConta(Cconta, key, i);
+								if(key!=99) {
+									mudarSenha(Cconta[key]);
+								}else {
+									System.out.println("Conta não encontrada");
+								}
 								break;
 							default:
 								break;
