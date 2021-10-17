@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.awt.FlowLayout;
+import javax.swing.*;
+
 
 
 public class Programa {
@@ -262,20 +265,46 @@ public class Programa {
 	
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
+		
+		
 		int mkey, key, loop, escolha, numconta, jurosoulimite, i=0, ig=1, contaGerenteAtiva; 
 		int temp;
 		String senha, senhatemp;
 		Contagerente[] Contag = new Contagerente[10];
 		Conta[] Cconta = new Conta[10];
 		
+		
+		
+		///teste
+		/*
+		String firstNumber = JOptionPane.showInputDialog("Ola");
+		String sNumber = JOptionPane.showInputDialog("konami");
+		int n1= Integer.parseInt(firstNumber);
+		int n2= Integer.parseInt(sNumber);
+		int sum = n1+n2;
+		JOptionPane.showMessageDialog(null, "SOMA CARAI: " + sum, "Soma", JOptionPane.PLAIN_MESSAGE);*/
+	   
+		
+		
+		
 		//gerente default
-		Contag[0] = new Contagerente();
+		/*Contag[0] = new Contagerente();
 		Contag[0].setNumeroConta(400);
-		Contag[0].alterarSenha("default", "400");
+		Contag[0].alterarSenha("default", "400");*/
+		
+		Tipodeusuario be = new Tipodeusuario();
+		be.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		be.setSize(400,600);
+		be.setVisible(true);
+		
 		
 		do {	
 			do {
-				mkey = selecModo();
+				//bEscolherUsuario.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				//bEscolherUsuario.setSize(300,300);
+				//bEscolherUsuario.setVisible(true);
+				mkey=1;
+				System.out.printf("AAAAAAAAAAAAAAAAAAAAAA");
 				if((mkey<0)||(mkey>2)) 
 				{
 					System.out.println("Numero digitado inválido");

@@ -5,7 +5,7 @@ public abstract class Conta {
 	private int numConta;
 	public double saldo=0;
 	private String senha="default";
-	
+	public int gerenteCadastrou=0;
 	
 	
 	public void setNumeroConta(int numero)///NUMERO CONTA
@@ -34,6 +34,13 @@ public abstract class Conta {
 		return saldo;
 	}
 	
+	public void setGerente(int num) {
+		gerenteCadastrou=num;
+	}
+	
+	public int getGerente() {
+		return gerenteCadastrou;
+	}
 
 	/*public void sacar(double valor) 
 	{
