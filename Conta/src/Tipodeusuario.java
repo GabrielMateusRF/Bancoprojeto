@@ -9,36 +9,6 @@ import javax.swing.*;
 public class Tipodeusuario extends JFrame {
 	
 	
-	public static int contaGerente(){
-		
-		
-		Scanner input = new Scanner(System.in);
-		System.out.println("Selecione o modo: ");
-		System.out.println("1. Verificar o nome de seus clientes e quais são suas respectivas contas");
-		System.out.println("2. Visualizar informções da conta");
-		System.out.println("3. Faz uma aplicação de dinheiro para um cliente específico");
-		System.out.println("4. Faz transferência de dinheiro entre contas específicas de clientes diferentes");
-		System.out.println("5. Faz retiradas maiores de R$ 110.000,00 de contas de seus clientes");
-		System.out.println("6. Cadastra/Edita os limites de retiradas negativas e também da taxa de juros da poupança");
-		System.out.println("7. Cadastrar outros usuários (gerentes e clientes)");
-		System.out.println("8. Alterar senha");
-		System.out.println("0. Voltar");
-		return input.nextInt();
-	}
-	
-	public static int contaCliente(){
-		Scanner input = new Scanner(System.in);
-		System.out.println("Selecione o modo: ");
-		System.out.println("1. Abrir Conta");
-		System.out.println("2. Aplicar Dinheiro");
-		System.out.println("3. Retirar Dinheiro");
-		System.out.println("4. Saldo");
-		System.out.println("5. Verificar Extratos");
-		System.out.println("6. Alterar senha");
-		System.out.println("0. Voltar");
-		return input.nextInt();
-	}
-	
 	public static int mensagemCriarConta() {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Que tipo de conta deseja criar?");
@@ -243,6 +213,9 @@ public class Tipodeusuario extends JFrame {
 		System.out.printf("Saldo atual da conta : %.2f\n", Cconta.getSaldo());
 	}
 	
+	
+	
+	
 	public static void mudarLimJuros(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
 		Scanner input = new Scanner(System.in);
 		if(Cconta instanceof Especial) {
@@ -259,29 +232,44 @@ public class Tipodeusuario extends JFrame {
             System.out.printf("Conta Não Especial ou Poupança");
         }
 	}
+	
 	public int choice;
 	private JButton bGerente;
 	private JButton bCliente;
 	private JButton bSair;
+	private JLabel Mensagem1;
+	public class Variaveis{
+		public static int i;
+		public static int ig;
+		public static Contagerente[] Contag = new Contagerente[10];
+		public static Conta[] Cconta = new Conta[10];
+	}
+	
+
+	Scanner input = new Scanner(System.in);
+	
+	int mkey, key, loop, escolha, numconta, jurosoulimite, contaGerenteAtiva; 
+	int temp;
+	String senha, senhatemp;
+	///Contagerente[] Contag = new Contagerente[10];
+	///Conta[] Cconta = new Conta[10];
+	
+	Gerenteopcoes Ger = new Gerenteopcoes();
+	ClienteOpcoes Cer = new ClienteOpcoes();
 	
 
 	
-	private JButton A;
-	private JButton B;
-	private JButton C;
-	Scanner input = new Scanner(System.in);
-	
-	int mkey, key, loop, escolha, numconta, jurosoulimite, i=0, ig=1, contaGerenteAtiva; 
-	int temp;
-	String senha, senhatemp;
-	Contagerente[] Contag = new Contagerente[10];
-	Conta[] Cconta = new Conta[10];
-	
-	
 	public Tipodeusuario(){
-		super("TIPO DE CONTA");
-		setLayout(new FlowLayout());
 		
+		
+		super("TIPO DE CONTA");
+		
+		
+		setLayout(new FlowLayout());
+		Mensagem1= new JLabel("");
+		Mensagem1.setText("Por favor, escolha o tipo de conta que deseja acessar");
+		Mensagem1.setToolTipText("TESTE");
+		add(Mensagem1);
 		bGerente = new JButton("Gerente");
 		add(bGerente);
 		
@@ -290,16 +278,22 @@ public class Tipodeusuario extends JFrame {
 		
 		bSair = new JButton("Sair");
 		add(bSair);
+		
+
 
 		ButtonHandler handler = new ButtonHandler();
 		bGerente.addActionListener(handler);
 		bCliente.addActionListener(handler);
 		bSair.addActionListener(handler);
 		
+		ButtonHandler handlser = new ButtonHandler();
+
+		bSair.addActionListener(handlser);
 		
-		Contag[0] = new Contagerente();
-		Contag[0].setNumeroConta(400);
-		Contag[0].alterarSenha("default", "400");
+		
+		Variaveis.Contag[0] = new Contagerente();
+		Variaveis.Contag[0].setNumeroConta(400);
+		Variaveis.Contag[0].alterarSenha("default", "400");
 		
 	}
 	
@@ -312,23 +306,26 @@ public class Tipodeusuario extends JFrame {
 				
 				String fNumConta = JOptionPane.showInputDialog("Digite no número da conta Gerente:");
 				key = Integer.parseInt(fNumConta);
-				contaGerenteAtiva=acharConta(Contag, key, ig);
-				if(contaGerenteAtiva==99) {
+				contaGerenteAtiva=acharConta(Variaveis.Contag, key, Variaveis.ig);
+				if(contaGerenteAtiva==99) {			
 					JOptionPane.showMessageDialog(null, "Conta não encontrada");
 				}else {
 					String sSenha = JOptionPane.showInputDialog("Coloque sua senha: ");
 					senha=sSenha;
-					if(Contag[contaGerenteAtiva].conferirSenha(senha)==0) {
+					if(Variaveis.Contag[contaGerenteAtiva].conferirSenha(senha)==0) {
 						JOptionPane.showMessageDialog(null, "Senha incorreta");
 					}
 					else {
 						do {
 							
-							Gerenteopcoes Ger = new Gerenteopcoes();
+							///Gerenteopcoes Ger = new Gerenteopcoes();
+							///Ger.setIg(ig);
+							
+							///ig=Ger.getIg();
 							Ger.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 							Ger.setSize(500,600);
 							Ger.setVisible(true);
-						
+							
 							
 							
 							
@@ -342,7 +339,7 @@ public class Tipodeusuario extends JFrame {
 								System.out.printf("Deseja: \n1)Imprimir lista de clientes\n2)Imprimir dados de uma conta especifica\n");
 								key=input.nextInt();
 								if(key==1){
-									for(temp=0; temp<i; temp++) {
+									for(temp=0; temp<Variaveis.i; temp++) {
 										///imprimirDado(Cconta[temp]);
 								
 									}
@@ -351,7 +348,7 @@ public class Tipodeusuario extends JFrame {
 									if(key==2) {
 									System.out.printf("Digite o numero da conta: ");
 									key=input.nextInt();
-									key=acharConta(Cconta, key, i);
+									key=acharConta(Variaveis.Cconta, key, Variaveis.i);
 										if(key!=99) {
 											///imprimirDado(Cconta[key]);
 										}else {
@@ -364,7 +361,7 @@ public class Tipodeusuario extends JFrame {
 							case 3:///Copiei só o aplicar
 								System.out.printf("Digite no número da conta na qual deseja aplicar dinheiro:");
 								key=input.nextInt();
-								key=acharConta(Cconta, key, i);
+								key=acharConta(Variaveis.Cconta, key, Variaveis.i);
 								if(key!=99) {
 									///aplicarDinheiro(Cconta[key]);
 								}else {
@@ -374,12 +371,12 @@ public class Tipodeusuario extends JFrame {
 							case 4:///Transferir ok
 								System.out.printf("Digite no número da conta da qual sairá o dinheiro:");
 								key=input.nextInt();
-								key=acharConta(Cconta, key, i);
+								key=acharConta(Variaveis.Cconta, key, Variaveis.i);
 								temp=key;
 								if(key!=99) {
 									System.out.printf("Digite no número da conta na qual o dinheiro será transferido:");
 									key=input.nextInt();
-									key=acharConta(Cconta, key, i);
+									key=acharConta(Variaveis.Cconta, key, Variaveis.i);
 									if((key!=99) && (temp!=key)){
 										///transferirDinheiro(Cconta[temp], Cconta[key]);
 									}else {
@@ -400,7 +397,7 @@ public class Tipodeusuario extends JFrame {
 							case 6:///Cadastrar/editar limites
 								System.out.printf("Digite no número da conta na qual deseja mudar o limite se for especial ou a taxa de juros se for poupança:");
 								key=input.nextInt();
-								key=acharConta(Cconta, key, i);
+								key=acharConta(Variaveis.Cconta, key, Variaveis.i);
 								if(key!=99) {
 									///mudarLimJuros(Cconta[key]);
 								}else {
@@ -426,18 +423,22 @@ public class Tipodeusuario extends JFrame {
 				///dispose();
 				///System.exit(0);
 			}else {
-				if(event.getActionCommand()== "Gerente") {
+				if(event.getActionCommand()== "Cliente") {
+					///ig=Ger.getIg();
+					
+					
+					Cer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					Cer.setSize(500,600);
+					Cer.setVisible(true);
 					
 				}else {
+					
 					///dispose();
 					System.exit(0);
 				}
 			}
 		}
 	}
-	
-
-	
 	
 }
 

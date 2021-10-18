@@ -18,19 +18,28 @@ public class Gerenteopcoes extends JFrame {
 	private JButton b7;
 	private JButton b8;
 	private JButton bSair;
-	
-
+	private JLabel Mensagem1;
+	int ig=1;
 	Scanner input = new Scanner(System.in);
 	
-	int mkey, key, loop, escolha, numconta, jurosoulimite, i=0, ig=1, contaGerenteAtiva; 
+	int mkey, key, loop, escolha, numconta, jurosoulimite, i=0,  contaGerenteAtiva; 
 	int temp;
 	String senha, senhatemp;
 	
+	public void setIg(int num){
+		ig=num;
+	}
+	
+	public int getIg() {
+		return ig;
+	}
 	
 	public Gerenteopcoes(){
 		super("Menu Gerente");
 		setLayout(new FlowLayout());
-		
+		Mensagem1= new JLabel("ddddddddddddddddddddddddddddddddddddddddd");
+		Mensagem1.setText("Aqui você pode acessar várias funções de gerente");
+		Mensagem1.setToolTipText("TESTE");
 		b1 = new JButton("Verificar o nome de seus clientes e quais são suas respectivas contas");
 		add(b1);
 		
@@ -75,7 +84,12 @@ public class Gerenteopcoes extends JFrame {
 	private class ButtonHandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			
+			if(event.getActionCommand()== "Verificar o nome de seus clientes e quais são suas respectivas contas") {
+				ig++;
+				
+			}else {
+				dispose();
+			}
 		}
 	}
 	

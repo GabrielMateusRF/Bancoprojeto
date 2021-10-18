@@ -2,6 +2,10 @@ import java.util.Scanner;
 import java.awt.FlowLayout;
 import javax.swing.*;
 
+import javax.swing.UIManager.*;
+
+
+
 
 
 public class Programa {
@@ -264,14 +268,27 @@ public class Programa {
 	}
 	
 	public static void main(String[] args) {
-		Scanner input = new Scanner(System.in);
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
 		
+		Tipodeusuario.Variaveis.i=0;
+		Tipodeusuario.Variaveis.ig=1;
 		
-		int mkey, key, loop, escolha, numconta, jurosoulimite, i=0, ig=1, contaGerenteAtiva; 
+		Tipodeusuario.Variaveis.Contag[0] = new Contagerente();
+		Tipodeusuario.Variaveis.Contag[0].setNumeroConta(400);
+		Tipodeusuario.Variaveis.Contag[0].alterarSenha("default", "400");
+		
+		int mkey, key, loop, escolha, numconta, jurosoulimite, contaGerenteAtiva; 
 		int temp;
 		String senha, senhatemp;
-		Contagerente[] Contag = new Contagerente[10];
-		Conta[] Cconta = new Conta[10];
 		
 		
 		
@@ -312,10 +329,10 @@ public class Programa {
 			}while((mkey<0)||(mkey>2));
 			
 			
-			if(mkey==1) {
+			/*if(mkey==1) {
 				System.out.printf("Digite no número da conta Gerente:");
 				key=input.nextInt();
-				contaGerenteAtiva=acharConta(Contag, key, ig);
+				contaGerenteAtiva=acharConta(Contag, key, Variaveis.ig);
 				if(contaGerenteAtiva==99) {
 					System.out.println("Conta Gerente não encontrada");
 					
@@ -337,7 +354,7 @@ public class Programa {
 								System.out.printf("Deseja: \n1)Imprimir lista de clientes\n2)Imprimir dados de uma conta especifica\n");
 								key=input.nextInt();
 								if(key==1){
-									for(temp=0; temp<i; temp++) {
+									for(temp=0; temp<Variaveis.i; temp++) {
 										imprimirDado(Cconta[temp]);
 								
 									}
@@ -417,8 +434,8 @@ public class Programa {
 				
 				
 				
-			}
-				else {
+			}*/
+				/*else {
 					if(mkey==2) {///Conta cliente
 					do {
 						System.out.println("Conta Cliente");
@@ -491,7 +508,7 @@ public class Programa {
 							}	
 					}while(loop!=0);
 				}
-			}
+			}*/
 		}while(mkey!=0);
 			
 		
