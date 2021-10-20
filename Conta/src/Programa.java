@@ -1,21 +1,17 @@
 import java.util.Scanner;
-import java.awt.FlowLayout;
-import javax.swing.*;
 
-import javax.swing.UIManager.*;
-
-
-
+import javax.swing.JFrame;
 
 
 public class Programa {
-	public static int selecModo() {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Selecione o modo: ");
-		System.out.println("1. Gerente");
-		System.out.println("2. Cliente");
-		System.out.println("0. Sair");
-		return input.nextInt();
+	
+	public static void selecModo() {		
+		MenuPrincipal menuPrincipal = new MenuPrincipal();
+		menuPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menuPrincipal.setLocation(1100,400);
+		menuPrincipal.setSize(350,100);
+		menuPrincipal.setVisible(true);
+		
 	}
 	
 	public static int contaGerente(){
@@ -55,6 +51,16 @@ public class Programa {
 		return input.nextInt();
 	}
 	
+	public static int mensagemCriarContaG() {
+		Scanner input = new Scanner(System.in);
+		System.out.println("Que tipo de conta deseja criar?");
+		System.out.println("1. Corrente");
+		System.out.println("2. Poupança");
+		System.out.println("3. Especial");
+		System.out.println("4. Gerente");
+		return input.nextInt();
+	}
+
 	public static void infoConta(Conta Cconta) {
 		System.out.printf("\n Informações da conta \n");
 		System.out.printf("\nNome do cliente: %s\n", Cconta.getNome());
@@ -72,7 +78,7 @@ public class Programa {
 		return 99;
 	}
 	
-	public static void criarContaC(Conta Cconta, int i) {///Cria conta Corrente
+	public static void criarContaC(Conta Cconta, int i, int gerente) {///Cria conta Corrente
 		Scanner input = new Scanner(System.in);
 		String senha, senhatemp;
 		System.out.print("Digite o nome do novo cliente: ");
@@ -88,9 +94,10 @@ public class Programa {
 		}while(!senhatemp.equals(senha));
 		Cconta.setNumeroConta(i+100);
 		Cconta.alterarSenha("default", senha);
+		Cconta.setgQueCadastrou(gerente);
 	}
 
-	public static void criarContaP(Conta Cconta, int i) {///Cria conta Poupanca
+	public static void criarContaP(Conta Cconta, int i, int gerente) {///Cria conta Poupanca
 		Scanner input = new Scanner(System.in);
 		String senha, senhatemp;
 		int jurosoulimite=0;
@@ -107,14 +114,14 @@ public class Programa {
 		}while(!senhatemp.equals(senha));
 		Cconta.setNumeroConta(i+100);
 		Cconta.alterarSenha("default", senha);
+		Cconta.setgQueCadastrou(gerente);
 		System.out.printf("Digite a taxa de juros: ");
 		jurosoulimite=input.nextInt();
 		((Poupanca) Cconta).setJuros(jurosoulimite);
 		
 	}
 
-
-	public static void criarContaE(Conta Cconta, int i) {///Cria conta especial
+	public static void criarContaE(Conta Cconta, int i, int gerente) {///Cria conta especial
 		Scanner input = new Scanner(System.in);
 		String senha, senhatemp;
 		int jurosoulimite=0;
@@ -131,11 +138,30 @@ public class Programa {
 		}while(!senhatemp.equals(senha));
 		Cconta.setNumeroConta(i+100);
 		Cconta.alterarSenha("default", senha);
+		Cconta.setgQueCadastrou(gerente);
 		System.out.printf("Digite o limite: ");
 		jurosoulimite=input.nextInt();
 		((Especial) Cconta).setLimite(jurosoulimite);
 	}
 	
+	public static void criarContaG(Conta Contag, int i, int gerente) {///Cria conta Corrente
+		Scanner input = new Scanner(System.in);
+		String senha, senhatemp;
+		System.out.print("Digite o nome do novo Gerente: ");
+		Contag.setNome(input.next());
+		do {
+			System.out.print("Digite uma senha: ");
+			senha=input.next();
+			System.out.printf("Digite a senha novamente:");
+			senhatemp=input.next();
+			if((!senhatemp.equals(senha))){
+				System.out.println("Senhas não coicidem");
+			}
+		}while(!senhatemp.equals(senha));
+		Contag.setNumeroConta(i+400);
+		Contag.alterarSenha("default", senha);
+		Contag.setgQueCadastrou(gerente);
+	}
 	
 	public static void aplicarDinheiro(Conta Cconta) {///Em banco para inserir dinheiro nao precisa de senha, certo?
 		Scanner input = new Scanner(System.in);
@@ -168,6 +194,29 @@ public class Programa {
         }
     }
 	
+	
+	public static void retirarDinheirog(Conta Cconta, int gerente) {///Precisa de senha
+        String senha;
+        float saque;
+        Scanner input = new Scanner(System.in);
+      
+        if(Cconta.getgQueCadastrou()==gerente) {
+            System.out.printf("Quanto deseja sacar?: ");
+            saque = input.nextFloat();
+            if(Cconta instanceof Especial) {
+                ((Especial) Cconta).sacar(saque);
+                System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
+            }else if(Cconta instanceof Corrente){
+                ((Corrente) Cconta).sacar(saque);
+                System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
+            }else {
+                ((Poupanca) Cconta).sacar(saque);
+                System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
+            }
+        }else {
+            System.out.println("Você não é o gerente desse cliente\n");
+        }
+    }
 	public static void consultarSaldo(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
 		String senha;
 		Scanner input = new Scanner(System.in);
@@ -180,8 +229,7 @@ public class Programa {
 			System.out.println("SENHA ERRADA");
 		}
 	}
-	
-	
+		
 	public static void mudarSenha(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
 		String senha, senhaNova;
 		Scanner input = new Scanner(System.in);
@@ -210,9 +258,11 @@ public class Programa {
          }else if(Cconta instanceof Corrente){
         	 System.out.printf("Tipo de conta: Corrente\n");
         	 
-         }else {
+         }else if (Cconta instanceof Poupanca){
              System.out.printf("Tipo de conta: Poupança\n");
              System.out.printf("juros: %.2f\n", ((Poupanca)Cconta).getJuros());
+         }else if(Cconta instanceof Contagerente) {
+        	 System.out.printf("Tipo de conta: Gerente\n");
          }
 	}
 	
@@ -267,176 +317,21 @@ public class Programa {
         }
 	}
 	
+	
+	
+	
+	
+	
 	public static void main(String[] args) {
-		try {
-		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		        if ("Nimbus".equals(info.getName())) {
-		            UIManager.setLookAndFeel(info.getClassName());
-		            break;
-		        }
-		    }
-		} catch (Exception e) {
-		    // If Nimbus is not available, you can set the GUI to another look and feel.
-		}
-		
-		Tipodeusuario.Variaveis.i=0;
-		Tipodeusuario.Variaveis.ig=1;
-		
-		Tipodeusuario.Variaveis.Contag[0] = new Contagerente();
-		Tipodeusuario.Variaveis.Contag[0].setNumeroConta(400);
-		Tipodeusuario.Variaveis.Contag[0].alterarSenha("default", "400");
-		
-		int mkey, key, loop, escolha, numconta, jurosoulimite, contaGerenteAtiva; 
+		Scanner input = new Scanner(System.in);
+		int mkey, key, loop, escolha, numconta, jurosoulimite, i=0, ig=1, contaGerenteAtiva; 
 		int temp;
 		String senha, senhatemp;
+		Contagerente[] Contag = new Contagerente[10];
+		Conta[] Cconta = new Conta[10];
 		
-		
-		
-		///teste
-		/*
-		String firstNumber = JOptionPane.showInputDialog("Ola");
-		String sNumber = JOptionPane.showInputDialog("konami");
-		int n1= Integer.parseInt(firstNumber);
-		int n2= Integer.parseInt(sNumber);
-		int sum = n1+n2;
-		JOptionPane.showMessageDialog(null, "SOMA CARAI: " + sum, "Soma", JOptionPane.PLAIN_MESSAGE);*/
-	   
-		
-		
-		
-		//gerente default
-		/*Contag[0] = new Contagerente();
-		Contag[0].setNumeroConta(400);
-		Contag[0].alterarSenha("default", "400");*/
-		
-		Tipodeusuario be = new Tipodeusuario();
-		be.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		be.setSize(400,600);
-		be.setVisible(true);
-		
-		
-		do {	
-			do {
-				//bEscolherUsuario.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				//bEscolherUsuario.setSize(300,300);
-				//bEscolherUsuario.setVisible(true);
-				mkey=1;
-				System.out.printf("AAAAAAAAAAAAAAAAAAAAAA");
-				if((mkey<0)||(mkey>2)) 
-				{
-					System.out.println("Numero digitado inválido");
-				}
-			}while((mkey<0)||(mkey>2));
-			
-			
-			/*if(mkey==1) {
-				System.out.printf("Digite no número da conta Gerente:");
-				key=input.nextInt();
-				contaGerenteAtiva=acharConta(Contag, key, Variaveis.ig);
-				if(contaGerenteAtiva==99) {
-					System.out.println("Conta Gerente não encontrada");
-					
-				}else {
-					System.out.printf("Digite a senha da conta: ");
-					senha=input.next();
-					if(Contag[contaGerenteAtiva].conferirSenha(senha)==0) {
-						System.out.println("Senha errada");
-					}
-					else {
-						do {
-							System.out.println("Conta Gerente");
-							loop=contaGerente();
-							switch(loop) {
-							case 1:///MARCELO
-								
-								break;
-							case 2://ok
-								System.out.printf("Deseja: \n1)Imprimir lista de clientes\n2)Imprimir dados de uma conta especifica\n");
-								key=input.nextInt();
-								if(key==1){
-									for(temp=0; temp<Variaveis.i; temp++) {
-										imprimirDado(Cconta[temp]);
-								
-									}
-								}
-								else { 
-									if(key==2) {
-									System.out.printf("Digite o numero da conta: ");
-									key=input.nextInt();
-									key=acharConta(Cconta, key, i);
-										if(key!=99) {
-											imprimirDado(Cconta[key]);
-										}else {
-											System.out.println("Conta não encontrada");
-										}
-									}
-								}
-								
-								break;
-							case 3:///Copiei só o aplicar
-								System.out.printf("Digite no número da conta na qual deseja aplicar dinheiro:");
-								key=input.nextInt();
-								key=acharConta(Cconta, key, i);
-								if(key!=99) {
-									aplicarDinheiro(Cconta[key]);
-								}else {
-									System.out.println("Conta não encontrada");
-								}
-								break;
-							case 4:///Transferir ok
-								System.out.printf("Digite no número da conta da qual sairá o dinheiro:");
-								key=input.nextInt();
-								key=acharConta(Cconta, key, i);
-								temp=key;
-								if(key!=99) {
-									System.out.printf("Digite no número da conta na qual o dinheiro será transferido:");
-									key=input.nextInt();
-									key=acharConta(Cconta, key, i);
-									if((key!=99) && (temp!=key)){
-										transferirDinheiro(Cconta[temp], Cconta[key]);
-									}else {
-										if(temp==key){
-											System.out.println("Você não pode transferir dinheiro para a mesma conta");
-										}else {
-											System.out.println("Conta não encontrada");
-										}
-									}
-								}else {
-									System.out.println("Conta não encontrada");
-								}
-								
-								
-								break;
-							case 5:///MARCELO
-								break;
-							case 6:///Cadastrar/editar limites
-								System.out.printf("Digite no número da conta na qual deseja mudar o limite se for especial ou a taxa de juros se for poupança:");
-								key=input.nextInt();
-								key=acharConta(Cconta, key, i);
-								if(key!=99) {
-									mudarLimJuros(Cconta[key]);
-								}else {
-									System.out.println("Conta não encontrada");
-								}
-								
-								break;
-							case 7:///cadastrar outros usuarios MARCELO
-								break;
-							case 8:///mudar senha
-								mudarSenha(Contag[contaGerenteAtiva]);
-								break;
-							}
-							
-						}while(loop!=0);
-					}
-					
-				}
-				
-				
-				
-			}*/
-				/*else {
-					if(mkey==2) {///Conta cliente
+		selecModo();
+
 					do {
 						System.out.println("Conta Cliente");
 						loop=contaCliente();
@@ -445,16 +340,16 @@ public class Programa {
 							escolha=mensagemCriarConta();
 							if(escolha==1) {///Corrente
 								Cconta[i] = new Corrente();
-								criarContaC(Cconta[i], i);
+								criarContaC(Cconta[i], i, 0);
 							
 							}
 							if(escolha==2) {///Poupanca
 								Cconta[i] = new Poupanca();
-								criarContaP(Cconta[i], i);
+								criarContaP(Cconta[i], i, 0);
 							}
 							if(escolha==3) {///Especial
 								Cconta[i] = new Especial();
-								criarContaE(Cconta[i], i);
+								criarContaE(Cconta[i], i, 0);
 							}
 							infoConta(Cconta[i]);
 							i++;
@@ -507,9 +402,7 @@ public class Programa {
 								break;
 							}	
 					}while(loop!=0);
-				}
-			}*/
-		}while(mkey!=0);
+
 			
 		
 		System.out.println("Programa terminado");

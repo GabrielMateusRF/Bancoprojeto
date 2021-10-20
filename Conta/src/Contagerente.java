@@ -1,11 +1,12 @@
 
 public class Contagerente extends Conta{
-	
+	int i=1;
 	public int getChave() {
-		return 1;
+		return i;
 	}
 	
-	public int setconta() {
-		return 1;
+	public void setChave(int mudar) {
+		i=mudar;
 	}
+	
 }
