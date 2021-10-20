@@ -1,0 +1,149 @@
+				
+				System.out.printf("Digite no número da conta Gerente:");
+				key=input.nextInt();
+				contaGerenteAtiva=acharConta(Contag, key, ig);
+				if(contaGerenteAtiva==99) {
+					System.out.println("Conta Gerente não encontrada");
+					
+				}else {
+					System.out.printf("Digite a senha da conta: ");
+					senha=input.next();
+					if(Contag[contaGerenteAtiva].conferirSenha(senha)==0) {
+						System.out.println("Senha errada");
+					}
+					else {
+						do {
+							System.out.println("Conta Gerente");
+							loop=contaGerente();
+							switch(loop) {
+							case 1:
+								for(temp=0; temp<i; temp++) {
+									if(contaGerenteAtiva==Cconta[temp].getgQueCadastrou()){
+										imprimirDado(Cconta[temp]);
+									}
+								}
+								
+								for(temp=0; temp<ig; temp++) {
+									if(contaGerenteAtiva==Contag[temp].getgQueCadastrou()){
+										imprimirDado(Contag[temp]);
+									}
+								}
+								break;
+							case 2://ok
+								System.out.printf("Deseja: \n1)Imprimir lista de clientes\n2)Imprimir dados de uma conta especifica\n");
+								key=input.nextInt();
+								if(key==1){
+									for(temp=0; temp<i; temp++) {
+										imprimirDado(Cconta[temp]);
+								
+									}
+								}
+								else { 
+									if(key==2) {
+									System.out.printf("Digite o numero da conta: ");
+									key=input.nextInt();
+									key=acharConta(Cconta, key, i);
+										if(key!=99) {
+											imprimirDado(Cconta[key]);
+										}else {
+											System.out.println("Conta não encontrada");
+										}
+									}
+								}
+								
+								break;
+							case 3:///igual ao aplicar
+								System.out.printf("Digite no número da conta na qual deseja aplicar dinheiro:");
+								key=input.nextInt();
+								key=acharConta(Cconta, key, i);
+								if(key!=99) {
+									aplicarDinheiro(Cconta[key]);
+								}else {
+									System.out.println("Conta não encontrada");
+								}
+								break;
+							case 4:///Transferir ok
+								System.out.printf("Digite no número da conta da qual sairá o dinheiro:");
+								key=input.nextInt();
+								key=acharConta(Cconta, key, i);
+								temp=key;
+								if(key!=99) {
+									System.out.printf("Digite no número da conta na qual o dinheiro será transferido:");
+									key=input.nextInt();
+									key=acharConta(Cconta, key, i);
+									if((key!=99) && (temp!=key)){
+										transferirDinheiro(Cconta[temp], Cconta[key]);
+									}else {
+										if(temp==key){
+											System.out.println("Você não pode transferir dinheiro para a mesma conta");
+										}else {
+											System.out.println("Conta não encontrada");
+										}
+									}
+								}else {
+									System.out.println("Conta não encontrada");
+								}
+								
+								
+								break;
+							case 5:///ok
+								System.out.printf("Digite no número da conta na qual deseja retirar dinheiro:");
+								key=input.nextInt();
+								key=acharConta(Cconta, key, i);
+								if(key!=99) {
+									retirarDinheirog(Cconta[key], contaGerenteAtiva);
+								}else {
+									System.out.println("Conta não encontrada");
+								}
+								break;
+							case 6:///Cadastrar/editar limites
+								System.out.printf("Digite no número da conta na qual deseja mudar o limite se for especial ou a taxa de juros se for poupança:");
+								key=input.nextInt();
+								key=acharConta(Cconta, key, i);
+								if(key!=99) {
+									mudarLimJuros(Cconta[key]);
+								}else {
+									System.out.println("Conta não encontrada");
+								}
+								
+								break;
+							case 7:///cadastrar outros usuarios
+								escolha=mensagemCriarContaG();
+								if(escolha==1) {///Corrente
+									Cconta[i] = new Corrente();
+									criarContaC(Cconta[i], i, contaGerenteAtiva);
+									infoConta(Cconta[i]);
+									i++;
+								
+								}
+								if(escolha==2) {///Poupanca
+									Cconta[i] = new Poupanca();
+									criarContaP(Cconta[i], i, contaGerenteAtiva);
+									infoConta(Cconta[i]);
+									i++;
+								}
+								if(escolha==3) {///Especial
+									Cconta[i] = new Especial();
+									criarContaE(Cconta[i], i, contaGerenteAtiva);
+									infoConta(Cconta[i]);
+									i++;
+									
+								}
+								if(escolha==4) {///Especial
+									Contag[ig] = new Contagerente();
+									criarContaG(Contag[ig], ig, contaGerenteAtiva);
+									infoConta(Contag[ig]);
+									ig++;
+								}
+								
+								
+								break;
+							case 8:///mudar senha
+								mudarSenha(Contag[contaGerenteAtiva]);
+								break;
+							}
+							
+						}while(loop!=0);
+					}
+					
+				}
