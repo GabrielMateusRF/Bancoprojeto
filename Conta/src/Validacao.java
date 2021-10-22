@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class Validacao extends JFrame{
 	
-	int tipoUsuario=0;
+	int tipoUsuario=0; //1=Gerente. 2=Cliente.
 	private JTextField usuarioField;
 	private JPasswordField senhaField;
 	private JButton bEnter;
@@ -67,6 +67,7 @@ public class Validacao extends JFrame{
 			Contagerente[] Contag = new Contagerente[10];
 			Conta[] Cconta = new Conta[10];
 			
+			MenuGerente menuGerente = new MenuGerente();
 			
 			
 			//gerente default
@@ -83,7 +84,7 @@ public class Validacao extends JFrame{
 				case 1:
 					if(event.getSource() == bEnter) {
 						event.getSource();
-						
+
 						key = Integer.parseInt(usuarioField.getText());
 						
 						contaGerenteAtiva=acharConta(Contag, key, ig);
@@ -98,8 +99,10 @@ public class Validacao extends JFrame{
 								JOptionPane.showMessageDialog(null, "Senha incorreta");
 							}
 							else {
-									
-									
+								menuGerente.setLocationRelativeTo(getFocusOwner());
+								menuGerente.setSize(350,350);
+								menuGerente.setVisible(true);
+								dispose();
 							}
 						}
 					}

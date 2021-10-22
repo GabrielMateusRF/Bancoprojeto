@@ -40,14 +40,14 @@ public class MenuPrincipal extends JFrame {
 			
 			
 			if(event.getActionCommand()== "Gerente"){
-				validacao.setTipoUsuario(1);
+				validacao.setTipoUsuario(1); //1=Gerente.
 				validacao.setLocationRelativeTo(getFocusOwner());
 				validacao.setSize(350,100);
 				validacao.setVisible(true);
 			}
 			
 			else{
-				validacao.setTipoUsuario(2);
+				validacao.setTipoUsuario(2); //2=Cliente.
 				validacao.setLocationRelativeTo(getFocusOwner());
 				validacao.setSize(350,100);
 				validacao.setVisible(true);

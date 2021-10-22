@@ -19,28 +19,43 @@ public class MenuGerente extends JFrame{
 	
 	
 	public MenuGerente(){
-		super("Menu do Gerente");
+		super("Menu gerente:");
+		setLayout(new FlowLayout());
 		
 		b1 = new JButton("Verificar o nom...");
+		b1.setToolTipText("Verificar o nome de seus clientes e quais são suas respectivas contas.");
+		add(b1);
+		
 		b2 = new JButton("Visualizar info...");
+		b2.setToolTipText("Visualizar informações da conta.");
+		add(b2);
+		
 		b3 = new JButton("Faz uma aplicaç...");
+		b3.setToolTipText("Faz uma aplicação de dinheiro para um cliente específico.");
+		add(b3);
+		
 		b4 = new JButton("Faz transferênc...");
+		b4.setToolTipText("Faz transferência de dinheiro entre contas específicas de clientes diferentes.");
+		add(b4);
+		
 		b5 = new JButton("Faz retiradas m...");
+		b5.setToolTipText("Faz retiradas maiores de R$ 110.000,00 de contas de seus clientes.");
+		add(b5);
+		
 		b6 = new JButton("Cadastra/Edita ...");
+		b6.setToolTipText("Cadastra/Edita os limites de retiradas negativas e também da taxa de juros da poupança.");
+		add(b6);
+		
 		b7 = new JButton("Cadastrar outro...");
+		b7.setToolTipText("Cadastrar outros usuários (gerentes e clientes).");
+		add(b7);
+		
 		b8 = new JButton("Alterar senha");
-		
-		add (b1);
-		add (b2);
-		add (b3);
-		add (b4);
-		add (b5);
-		add (b6);
-		add (b7);
-		add (b8);
-		
+		b8.setToolTipText("Alterar senha.");
+		add(b8);
+				
 		ButtonHandler handler = new ButtonHandler();
-		
+				
 		b1.addActionListener(handler);
 		b2.addActionListener(handler);
 		b3.addActionListener(handler);
