@@ -47,71 +47,56 @@ public class MenuPrincipal extends JFrame {
 	}
 	
 	
-	public static void criarContaC(Conta Cconta, int i, int gerente) {///Cria conta Corrente
-		Scanner input = new Scanner(System.in);
-		String senha, senhatemp;
-		System.out.print("Digite o nome do novo cliente: ");
-		Cconta.setNome(input.next());
-		do {
-			System.out.print("Digite uma senha: ");
-			senha=input.next();
-			System.out.printf("Digite a senha novamente:");
-			senhatemp=input.next();
-			if((!senhatemp.equals(senha))){
-				System.out.println("Senhas não coicidem");
+	public static void criarContaC(Conta Cconta, int nCCliente, int gerente) {///Cria conta Corrente
+		///Menu CriarConta
+		///System.out.printf("Konami1\n");
+		JPanel menuCriarContaPainel = new JPanel();
+		System.out.printf("Konami2\n");
+		System.out.printf("Konami3\n");
+		JLabel labelNome = new JLabel("Nome: ");
+		JTextField txtNome = new JTextField(10);
+		JLabel labelSenha = new JLabel("Senha: ");
+		JPasswordField senhaConta = new JPasswordField(10);
+		String[] opcoes = new String[]{"Confirmar", "Cancelar"};
+		String[] tipodeconta = new String[] {"Selecione o tipo de Conta","Corrente", "Poupança", "Especial"};
+		JComboBox comboBoxTipodeConta = new JComboBox(tipodeconta);
+		int opcao, opcao2;
+		
+		
+		menuCriarContaPainel.add(labelNome);
+		menuCriarContaPainel.add(txtNome);
+		menuCriarContaPainel.add(labelSenha);
+		menuCriarContaPainel.add(senhaConta);
+		menuCriarContaPainel.add(comboBoxTipodeConta);
+		
+		opcao = JOptionPane.showOptionDialog(null, menuCriarContaPainel, "Criar Conta", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+		opcao2 = comboBoxTipodeConta.getSelectedIndex();
+		if(opcao==0) {
+			System.out.printf("Konamiinfity\n");
+			Cconta.setNumeroConta(100+nCCliente);///ERRO AQUI
+			System.out.printf("Konami4\n");
+			Cconta.setNome(String.valueOf(txtNome));
+			System.out.printf("Konami5\n");
+			Cconta.alterarSenha("default", String.valueOf(senhaConta));
+			System.out.printf("Konami6\n");
+			Cconta.setgQueCadastrou(gerente);
+			System.out.printf("Konami7\n");
+			///CASO A PESSOA NÃO COLQOUE NADA OU 1, ELA IRÁ CRIAR UMA CONTA CORRENTE
+			if(opcao2==3){///Especial
+				///Default do set de limite será 500 reais
+				((Especial) Cconta).setLimite(500);
+			}else {
+				if(opcao2==2) {///Poupanca
+					///Default do set juros será 5%
+					((Poupanca) Cconta).setJuros(5);
+				}
+				///Corrente
 			}
-		}while(!senhatemp.equals(senha));
-		Cconta.setNumeroConta(i+100);
-		Cconta.alterarSenha("default", senha);
-		Cconta.setgQueCadastrou(gerente);
-	}
-
-	public static void criarContaP(Conta Cconta, int i, int gerente) {///Cria conta Poupanca
-		Scanner input = new Scanner(System.in);
-		String senha, senhatemp;
-		int jurosoulimite=0;
-		System.out.print("Digite o nome do novo cliente: ");
-		Cconta.setNome(input.next());
-		do {
-			System.out.print("Digite uma senha: ");
-			senha=input.next();
-			System.out.printf("Digite a senha novamente:");
-			senhatemp=input.next();
-			if((!senhatemp.equals(senha))){
-				System.out.println("Senhas não coicidem");
-			}
-		}while(!senhatemp.equals(senha));
-		Cconta.setNumeroConta(i+100);
-		Cconta.alterarSenha("default", senha);
-		Cconta.setgQueCadastrou(gerente);
-		System.out.printf("Digite a taxa de juros: ");
-		jurosoulimite=input.nextInt();
-		((Poupanca) Cconta).setJuros(jurosoulimite);
+			System.out.println("Conta Criada");
+		}	
 		
 	}
 
-	public static void criarContaE(Conta Cconta, int i, int gerente) {///Cria conta especial
-		Scanner input = new Scanner(System.in);
-		String senha, senhatemp;
-		int jurosoulimite=0;
-		System.out.print("Digite o nome do novo cliente: ");
-		Cconta.setNome(input.next());
-		do {
-			System.out.print("Digite uma senha: ");
-			senha=input.next();
-			System.out.printf("Digite a senha novamente:");
-			senhatemp=input.next();
-			if((!senhatemp.equals(senha))){
-				System.out.println("Senhas não coicidem");
-			}
-		}while(!senhatemp.equals(senha));
-		Cconta.setNumeroConta(i+100);
-		Cconta.alterarSenha("default", senha);
-		Cconta.setgQueCadastrou(gerente);
-		System.out.printf("Digite o limite: ");
-		jurosoulimite=input.nextInt();
-		((Especial) Cconta).setLimite(jurosoulimite);
-	}
 	
 	public static void criarContaG(Conta Contag, int i, int gerente) {///Cria conta Corrente
 		Scanner input = new Scanner(System.in);
@@ -327,6 +312,8 @@ public class MenuPrincipal extends JFrame {
 	JComboBox menuCliente = new JComboBox(opcoesMenuCliente);
 	
 	
+
+	
 	//Alocacao
 	Contagerente[] Contag = new Contagerente[10];
 	Conta[] Cconta = new Conta[10];
@@ -411,6 +398,7 @@ public class MenuPrincipal extends JFrame {
 								if(opcao==0){
 									switch(opcao2) {
 									case 1:
+										///Vai precisar de alteracao no loop
 										for(temp=0; temp<nCCliente; temp++) {
 											if(contaGerenteAtiva==Cconta[temp].getgQueCadastrou()){
 												imprimirDado(Cconta[temp]);
@@ -546,7 +534,7 @@ public class MenuPrincipal extends JFrame {
 			}
 			
 			else{
-			
+				///MENU CLIENTE
 				menuClientePainel.add(menuCliente);
 				
 				opcao = JOptionPane.showOptionDialog(null, menuClientePainel, "Menu Cliente", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null,  opcoes, opcoes[1]);
@@ -554,6 +542,9 @@ public class MenuPrincipal extends JFrame {
 				if(opcao==0){
 					switch (opcao2) {
 					case 1:///criar conta OK
+					System.out.printf("Konami\n");
+					criarContaC(Cconta[nCCliente], nCCliente, 0);
+					nCCliente++;
 					/*escolha=mensagemCriarConta();
 					if(escolha==1) {///Corrente
 						Cconta[i] = new Corrente();
