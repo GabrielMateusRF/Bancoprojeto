@@ -327,11 +327,11 @@ public class Programa {
 		int temp;
 		String senha, senhatemp;
 		////Contagerente[] Contag = new Contagerente[10];
-		Conta[] Cconta = new Conta[10];
+		////Conta[] Cconta = new Conta[10];
 		
 		selecModo();
 
-					do {
+					/*do {
 						System.out.println("Conta Cliente");
 						loop=contaCliente();
 						switch (loop) {
@@ -401,7 +401,7 @@ public class Programa {
 								break;
 							}	
 					}while(loop!=0);
-
+*/
 			
 		
 		System.out.println("Programa terminado");
