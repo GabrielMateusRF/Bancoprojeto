@@ -80,40 +80,7 @@ public class Validacao extends JFrame{
 				dispose();
 			}
 			
-			switch(tipoUsuario) {
-				case 1:
-					if(event.getSource() == bEnter) {
-						event.getSource();
-
-						key = Integer.parseInt(usuarioField.getText());
-						
-						contaGerenteAtiva=acharConta(Contag, key, ig);
-						if(contaGerenteAtiva==99) {
-							JOptionPane.showMessageDialog(null, "Conta não encontrada");
-							
-						}else {
-							
-							senha = String.valueOf(senhaField.getPassword());
-							
-							if(Contag[contaGerenteAtiva].conferirSenha(senha)==0) {
-								JOptionPane.showMessageDialog(null, "Senha incorreta");
-							}
-							else {
-								menuGerente.setLocationRelativeTo(getFocusOwner());
-								menuGerente.setSize(350,350);
-								menuGerente.setVisible(true);
-								dispose();
-							}
-						}
-					}
-					break;
-					
-				case 2:
-					if(event.getSource() == bEnter) {
-						
-					}
-					break;
-			}
+			
 		}
 	}
 }

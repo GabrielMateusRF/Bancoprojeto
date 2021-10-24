@@ -326,7 +326,7 @@ public class Programa {
 		int mkey, key, loop, escolha, numconta, jurosoulimite, i=0, ig=1, contaGerenteAtiva; 
 		int temp;
 		String senha, senhatemp;
-		Contagerente[] Contag = new Contagerente[10];
+		////Contagerente[] Contag = new Contagerente[10];
 		Conta[] Cconta = new Conta[10];
 		
 		selecModo();
