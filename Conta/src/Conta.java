@@ -2,6 +2,8 @@ import javax.swing.JOptionPane;
 
 public abstract class Conta {
 
+	///NOTA, ainda há senha aqui, pois gerente naõ é um usuario, sendo assim é somente CONTA, tendo que ter senha
+	//Todos as outras contas sempre que é pedido senha, se refere a senha do USUARIO
 	private String nome;
 	private int numConta;
 	public double saldo=0;
@@ -86,8 +88,6 @@ public abstract class Conta {
 		if(senha.equals(senhadada)) {
 			return 1;
 		}else {
-			System.out.printf("SENHA: %s \n", senha);
-			System.out.printf("SENHA DIGITADO: %s \n", senhadada);
 			return 0;
 		}
 	}
