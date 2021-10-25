@@ -55,7 +55,7 @@ public class MenuPrincipal extends JFrame {
 			Cconta.alterarSenha("default", senha);
 			Cconta.setgQueCadastrou(gerente);
 			System.out.println("Conta Criada");
-		
+			JOptionPane.showMessageDialog(null, "Número da Conta: " +Cconta.getNumeroConta() +  ".  \nCadastro bem sucedido");
 	}
 	
 	public static void criarContaG(Conta Cconta, int nCCliente, int gerente, String nome, String senha) {///Cria conta Corrente
@@ -66,6 +66,7 @@ public class MenuPrincipal extends JFrame {
 			Cconta.alterarSenha("default", senha);
 			Cconta.setgQueCadastrou(gerente);
 			System.out.println("Conta Criada");
+			JOptionPane.showMessageDialog(null, "Número da Conta: " +Cconta.getNumeroConta() +  ".   \nCadastro bem sucedido");
 		
 	}
 
@@ -722,7 +723,6 @@ public class MenuPrincipal extends JFrame {
 						criarContaC(Cconta[nCCliente], nCCliente, 0, String.valueOf(txtNome.getText()),String.valueOf(senhaConta2.getPassword()));
 						System.out.printf("\n %d \n", Cconta[nCCliente].getNumeroConta());
 						System.out.printf("\n %s \n", Cconta[nCCliente].getNome());
-						
 						nCCliente++;
 						}
 					
