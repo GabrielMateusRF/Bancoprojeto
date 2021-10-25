@@ -8,7 +8,6 @@ public abstract class Conta {
 	private String senha="default";
 	public int gQueCadastrou;
 	
-	
 	public void setNumeroConta(int numero)///NUMERO CONTA
 	{
 		numConta=numero;
@@ -65,6 +64,7 @@ public abstract class Conta {
 	{
 		saldo+=valor;
 		System.out.printf("\n Depositado com sucesso!\n");
+		
 	}
 	
 	public void alterarSenha (String senhaAntiga, String senhaNova) 

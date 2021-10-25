@@ -50,7 +50,18 @@ public class MenuPrincipal extends JFrame {
 	public static void criarContaC(Conta Cconta, int nCCliente, int gerente, String nome, String senha) {///Cria conta Corrente
 		///Menu CriarConta
 	
-			Cconta.setNumeroConta(100+nCCliente);///ERRO AQUI
+			Cconta.setNumeroConta(100+nCCliente);
+			Cconta.setNome(nome);
+			Cconta.alterarSenha("default", senha);
+			Cconta.setgQueCadastrou(gerente);
+			System.out.println("Conta Criada");
+		
+	}
+	
+	public static void criarContaG(Conta Cconta, int nCCliente, int gerente, String nome, String senha) {///Cria conta Corrente
+		///Menu CriarConta
+	
+			Cconta.setNumeroConta(400+nCCliente);
 			Cconta.setNome(nome);
 			Cconta.alterarSenha("default", senha);
 			Cconta.setgQueCadastrou(gerente);
@@ -59,24 +70,6 @@ public class MenuPrincipal extends JFrame {
 	}
 
 	
-	public static void criarContaG(Conta Contag, int i, int gerente) {///Cria conta Corrente
-		Scanner input = new Scanner(System.in);
-		String senha, senhatemp;
-		System.out.print("Digite o nome do novo Gerente: ");
-		Contag.setNome(input.next());
-		do {
-			System.out.print("Digite uma senha: ");
-			senha=input.next();
-			System.out.printf("Digite a senha novamente:");
-			senhatemp=input.next();
-			if((!senhatemp.equals(senha))){
-				System.out.println("Senhas não coicidem");
-			}
-		}while(!senhatemp.equals(senha));
-		Contag.setNumeroConta(i+400);
-		Contag.alterarSenha("default", senha);
-		Contag.setgQueCadastrou(gerente);
-	}
 	
 	public static void aplicarDinheiro(Conta Cconta[], int nCCliente) {///Em banco para inserir dinheiro nao precisa de senha, certo?
         JPanel menuAplicar = new JPanel();
@@ -475,7 +468,11 @@ public class MenuPrincipal extends JFrame {
 	JPasswordField senhaConta2 = new JPasswordField(10);
 	String[] tipodeconta = new String[] {"Selecione o tipo de Conta","Corrente", "Poupança", "Especial"};
 	JComboBox comboBoxTipodeConta = new JComboBox(tipodeconta);
-
+	///Criar Conta Extra de Gerente
+	///Criar Conta Só dos gerentes
+	JPanel menuCriarContaPainel2 = new JPanel();
+	String[] tipodecontaG = new String[] {"Selecione o tipo de Conta","Corrente", "Poupança", "Especial", "Gerente"};
+	JComboBox comboBoxTipodeContaG = new JComboBox(tipodecontaG);
 	
 	//Alocacao
 	Contagerente[] Contag = new Contagerente[10];
@@ -521,7 +518,8 @@ public class MenuPrincipal extends JFrame {
 			Contag[0].setNumeroConta(400);
 			Contag[0].alterarSenha("default", "400");
 			Contag[0].setgQueCadastrou(0);
-			///Testando
+			Contag[0].setNome("Gerente Primeiro");
+		
 			
 			///validacaoAdd
 			validacao.add(labelLogin);
@@ -616,33 +614,55 @@ public class MenuPrincipal extends JFrame {
 										break;
 										
 									case 7:///cadastrar outros usuarios
-										/*escolha=mensagemCriarContaG();
-										if(escolha==1) {///Corrente
-											Cconta[nCCliente] = new Corrente();
-											criarContaC(Cconta[nCCliente], nCCliente, contaGerenteAtiva);
-											infoConta(Cconta[nCCliente]);
-											nCCliente++;
 										
-										}
-										if(escolha==2) {///Poupanca
-											Cconta[nCCliente] = new Poupanca();
-											criarContaP(Cconta[nCCliente], nCCliente, contaGerenteAtiva);
-											infoConta(Cconta[nCCliente]);
-											nCCliente++;
-										}
-										if(escolha==3) {///Especial
-											Cconta[nCCliente] = new Especial();
-											criarContaE(Cconta[nCCliente], nCCliente, contaGerenteAtiva);
-											infoConta(Cconta[nCCliente]);
-											nCCliente++;
+										menuCriarContaPainel2.add(labelNome);
+										menuCriarContaPainel2.add(txtNome);
+										menuCriarContaPainel2.add(labelSenha);
+										menuCriarContaPainel2.add(senhaConta2);
+										menuCriarContaPainel2.add(comboBoxTipodeContaG);
+
+										opcao = JOptionPane.showOptionDialog(null, menuCriarContaPainel2, "Criar Conta", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+										opcao2 = comboBoxTipodeContaG.getSelectedIndex();
+										if(opcao==0) {
 											
+											///CASO A PESSOA NÃO COLQOUE NADA, ELA IRÁ CRIAR UMA CONTA CORRENTE
+											if(opcao2==4){///Gerente
+												Contag[nCGerente] = new Contagerente();
+												
+											}else {///Especial
+												if(opcao2==3) {
+													///Default do set de limite será 500 reais
+													
+													Cconta[nCCliente] = new Especial();
+													((Especial) Cconta[nCCliente]).setLimite(500);
+												}else {
+													if(opcao2==2) {///Poupanca
+														///Default do set juros será 5%
+														
+														Cconta[nCCliente] = new Poupanca();
+														((Poupanca) Cconta[nCCliente]).setJuros(5);
+													}else {
+														///Corrente
+														Cconta[nCCliente] = new Corrente();
+													}
+												}
+											}
+											
+										
+											if(opcao2==4) {
+												criarContaG(Contag[nCGerente], nCGerente, contaGerenteAtiva, String.valueOf(txtNome.getText()),String.valueOf(senhaConta2.getPassword()));
+												System.out.printf("\n %d \n", Contag[nCGerente].getNumeroConta());
+												System.out.printf("\n %s \n", Contag[nCGerente].getNome());
+												nCGerente++;
+											}else {
+												criarContaC(Cconta[nCCliente], nCCliente, contaGerenteAtiva, String.valueOf(txtNome.getText()),String.valueOf(senhaConta2.getPassword()));
+												System.out.printf("\n %d \n", Cconta[nCCliente].getNumeroConta());
+												System.out.printf("\n %s \n", Cconta[nCCliente].getNome());
+												nCCliente++;
+											}
 										}
-										if(escolha==4) {///Especial
-											Contag[nCGerente] = new Contagerente();
-											criarContaG(Contag[nCGerente], nCGerente, contaGerenteAtiva);
-											infoConta(Contag[nCGerente]);
-											nCGerente++;
-										}*/
+										
+										
 										
 										
 										break;
@@ -681,7 +701,7 @@ public class MenuPrincipal extends JFrame {
 						opcao2 = comboBoxTipodeConta.getSelectedIndex();
 						if(opcao==0) {
 							
-							///CASO A PESSOA NÃO COLQOUE NADA OU 1, ELA IRÁ CRIAR UMA CONTA CORRENTE
+							///CASO A PESSOA NÃO COLQOUE NADA, ELA IRÁ CRIAR UMA CONTA CORRENTE
 							if(opcao2==3){///Especial
 								///Default do set de limite será 500 reais
 								
@@ -693,9 +713,10 @@ public class MenuPrincipal extends JFrame {
 									
 									Cconta[nCCliente] = new Poupanca();
 									((Poupanca) Cconta[nCCliente]).setJuros(5);
-								}
+								}else {
 								///Corrente
-								Cconta[nCCliente] = new Corrente();
+									Cconta[nCCliente] = new Corrente();
+								}
 							}
 							
 						criarContaC(Cconta[nCCliente], nCCliente, 0, String.valueOf(txtNome.getText()),String.valueOf(senhaConta2.getPassword()));
