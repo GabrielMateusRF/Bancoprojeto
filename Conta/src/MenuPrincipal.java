@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
@@ -17,15 +18,13 @@ public class MenuPrincipal extends JFrame {
 		return 99;
 	}
 	
-
-	///PECADO COMEÇO, MARCELO É ATEU, ENTÃO ELE ARRUMA
-	
 	public static int mensagemCriarConta() {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Que tipo de conta deseja criar?");
 		System.out.println("1. Corrente");
 		System.out.println("2. Poupança");
 		System.out.println("3. Especial");
+		
 		return input.nextInt();
 	}
 	
@@ -36,6 +35,7 @@ public class MenuPrincipal extends JFrame {
 		System.out.println("2. Poupança");
 		System.out.println("3. Especial");
 		System.out.println("4. Gerente");
+		
 		return input.nextInt();
 	}
 
@@ -46,7 +46,6 @@ public class MenuPrincipal extends JFrame {
 		System.out.println("Agradecemos a escolha de criar uma conta conosco.");	
 	}
 	
-	
 	public static void criarContaC(Conta Cconta, int nCCliente, int gerente, String nome, String senha) {///Cria conta Corrente
 		///Menu CriarConta
 	
@@ -55,7 +54,7 @@ public class MenuPrincipal extends JFrame {
 			Cconta.alterarSenha("default", senha);
 			Cconta.setgQueCadastrou(gerente);
 			System.out.println("Conta Criada");
-			JOptionPane.showMessageDialog(null, "Número da Conta: " +Cconta.getNumeroConta() +  ".  \nCadastro bem sucedido");
+			JOptionPane.showMessageDialog(null, "Número da Conta: " + Cconta.getNumeroConta() + ".  \nCadastro bem sucedido");
 	}
 	
 	public static void criarContaG(Conta Cconta, int nCCliente, int gerente, String nome, String senha) {///Cria conta Corrente
@@ -66,15 +65,12 @@ public class MenuPrincipal extends JFrame {
 			Cconta.alterarSenha("default", senha);
 			Cconta.setgQueCadastrou(gerente);
 			System.out.println("Conta Criada");
-			JOptionPane.showMessageDialog(null, "Número da Conta: " +Cconta.getNumeroConta() +  ".   \nCadastro bem sucedido");
-		
+			JOptionPane.showMessageDialog(null, "Número da Conta: " + Cconta.getNumeroConta() + ".   \nCadastro bem sucedido");
 	}
 
-	
-	
 	public static void aplicarDinheiro(Conta Cconta[], int nCCliente) {///Em banco para inserir dinheiro nao precisa de senha, certo?
         JPanel menuAplicar = new JPanel();
-        JLabel labelNumConta = new JLabel("Digite o número da conta que deseja aplicar Dinheiro: ");
+        JLabel labelNumConta = new JLabel("Número da conta que deseja aplicar Dinheiro: ");
         JTextField numConta = new JTextField(10);
         JLabel labelValor = new JLabel("Digite o quanto Deseja Aplicar R$:");
         JTextField infoValor = new JTextField(10);
@@ -84,6 +80,7 @@ public class MenuPrincipal extends JFrame {
         menuAplicar.add(numConta);
         menuAplicar.add(labelValor);
         menuAplicar.add(infoValor);
+        menuAplicar.setPreferredSize(new Dimension(200,350));
         
         JOptionPane.showOptionDialog(null, menuAplicar,  "Aplicar Dinheiro ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
         
@@ -96,9 +93,6 @@ public class MenuPrincipal extends JFrame {
         }else {
             Cconta[key].depositar(Double.parseDouble(infoValor.getText()));
         }
-        /*System.out.printf("Conta numero: %d \nCliente: %s\nDigite o valor inserido: ", Cconta.getNumeroConta(), Cconta.getNome());
-        Cconta.depositar(input.nextDouble());
-        System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());*/
     }
 	
 	public static void retirarDinheiro(Conta Cconta[], int nCCliente) {///Precisa de senha
@@ -117,6 +111,7 @@ public class MenuPrincipal extends JFrame {
         menuRetirar.add(senhaInfo);
         menuRetirar.add(labelValor);
         menuRetirar.add(infoValor);
+        menuRetirar.setPreferredSize(new Dimension(200,350));
         
         JOptionPane.showOptionDialog(null, menuRetirar,  "Retirar Dinheiro ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
         
@@ -161,9 +156,7 @@ public class MenuPrincipal extends JFrame {
         }
     }
 	
-	
 	public static void retirarDinheirog(Conta Cconta, int gerente) {///Precisa de senha
-
         String senha;
         float saque;
         Scanner input = new Scanner(System.in);
@@ -171,6 +164,7 @@ public class MenuPrincipal extends JFrame {
         if(Cconta.getgQueCadastrou()==gerente) {
             System.out.printf("Quanto deseja sacar?: ");
             saque = input.nextFloat();
+            
             if(Cconta instanceof Especial) {
                 ((Especial) Cconta).sacar(saque);
                 System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
@@ -188,51 +182,53 @@ public class MenuPrincipal extends JFrame {
 	
 	public static void consultarSaldo(Conta Cconta[],int key, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
 		JPanel menuConsultarSaldo = new JPanel();
-		JLabel labelLogin = new JLabel("Número da conta que deseja Consultar o saldo:");
-		JLabel labelSenha = new JLabel("Senha: ");
+		JLabel labelLogin = new JLabel("Número da conta: ");
+		JLabel labelSenha = new JLabel("Senha da conta: ");
 		JTextField txtNome = new JTextField(10);
 		JPasswordField senhaConta = new JPasswordField(10);
 		
-		JLabel labelInfos1 = new JLabel("Conta numero: " + Cconta[key].getNumeroConta());
+		JLabel labelInfos1 = new JLabel("Conta número: " + Cconta[key].getNumeroConta());
 		JLabel labelInfos2 = new JLabel("Cliente: " + Cconta[key].getNome());
 		JLabel labelInfos3 = new JLabel("Saldo atual: " + Cconta[key].getSaldo());
 		
 		String[] opcoes = new String[]{"Confirmar", "Fechar"};
+		String senha;
 		int opcao;
 		
 		menuConsultarSaldo.add(labelLogin);
 		menuConsultarSaldo.add(txtNome);
 		menuConsultarSaldo.add(labelSenha);
 		menuConsultarSaldo.add(senhaConta);
+		menuConsultarSaldo.setPreferredSize(new Dimension(200,350));
 		
 		opcao = JOptionPane.showOptionDialog(null, menuConsultarSaldo, "Saldo", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
 		
-		key=Integer.parseInt(String.valueOf(txtNome.getText()));
-		key=acharConta(Cconta, key, nCCliente);
 		while(opcao ==0) {
-			if(key!=99) {
-				String senha;
-				System.out.printf("Conta numero: %d \nCliente: %s\nDigite a senha: ", Cconta[key].getNumeroConta(), Cconta[key].getNome());
-				menuConsultarSaldo.add(labelInfos1);
-				menuConsultarSaldo.add(labelInfos2);
-				
-				senha=String.valueOf(senhaConta.getPassword());
-				if(Cconta[key].conferirSenha(senha)==1) {
-					menuConsultarSaldo.add(labelInfos3);
-					opcao = JOptionPane.showOptionDialog(null, menuConsultarSaldo, "Saldo", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+			key=Integer.parseInt(String.valueOf(txtNome.getText()));
+			key=acharConta(Cconta, key, nCCliente);
+				if(key!=99) {
+					menuConsultarSaldo.add(labelInfos1);
+					menuConsultarSaldo.add(labelInfos2);
+					
+					senha=String.valueOf(senhaConta.getPassword());
+					if(Cconta[key].conferirSenha(senha)==1) {
+						menuConsultarSaldo.add(labelInfos3);
+						opcao = JOptionPane.showOptionDialog(null, menuConsultarSaldo, "Saldo", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+					}else {
+						JOptionPane.showMessageDialog(null, "Senha errada");
+						opcao=1;
+					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Senha errada");
+					JOptionPane.showMessageDialog(null, "Conta não encontrada");
+					opcao=1;
 				}
-			}else {
-				JOptionPane.showMessageDialog(null, "Conta não encontrada");
-			}
 		}
 	}
 		
 	public static void mudarSenha(Conta Cconta[], int key,int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
 		JPanel menuAlterarSenhaPainel = new JPanel();
-		JLabel labelLogin = new JLabel("Número da conta que deseja alterar a senha: ");
-		JLabel labelSenha = new JLabel("Senha antiga: ");
+		JLabel labelLogin = new JLabel("Número da conta: ");
+		JLabel labelSenha = new JLabel("Senha: ");
 		JLabel labelSenha2 = new JLabel("Nova senha: ");
 		JTextField txtNome = new JTextField(10);
 		JPasswordField senhaConta = new JPasswordField(10);
@@ -240,17 +236,15 @@ public class MenuPrincipal extends JFrame {
 		String[] opcoes = new String[]{"Confirmar", "Fechar"};
 		int opcao;
 		
-		
 		menuAlterarSenhaPainel.add(labelLogin);
 		menuAlterarSenhaPainel.add(txtNome);
 		menuAlterarSenhaPainel.add(labelSenha);
 		menuAlterarSenhaPainel.add(senhaConta);
 		menuAlterarSenhaPainel.add(labelSenha2);
 		menuAlterarSenhaPainel.add(senhaConta2);
+		menuAlterarSenhaPainel.setPreferredSize(new Dimension(200,350));
 		
 		opcao = JOptionPane.showOptionDialog(null, menuAlterarSenhaPainel, "Alterar Senha", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
-		
-
 		
 		if(opcao == 0) {
 			key=Integer.parseInt(txtNome.getText());
@@ -266,7 +260,6 @@ public class MenuPrincipal extends JFrame {
 	public static void imprimirDado(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
         Scanner input = new Scanner(System.in);
         
-        
         JPanel menuImpDados = new JPanel();
         JLabel labelNome = new JLabel("Nome: ");
         JLabel nomeInfo = new JLabel(Cconta.getNome());
@@ -278,10 +271,6 @@ public class MenuPrincipal extends JFrame {
         
         String[] opcoes = new String[]{"Continuar", "Fechar"};
         
-        //JOptionPane.showOptionDialog(null, menuClientePainel, "Menu Cliente", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null,  opcoes, opcoes[1]);
-        
-        
-        
         menuImpDados.add(labelNome);
         menuImpDados.add(nomeInfo);
         menuImpDados.add(labelNumero);
@@ -289,6 +278,8 @@ public class MenuPrincipal extends JFrame {
         menuImpDados.add(labelSaldo);
         menuImpDados.add(saldoInfo);
         menuImpDados.add(labelTipo);
+        menuImpDados.setPreferredSize(new Dimension(200,350));
+        
         if(Cconta instanceof Especial) {
             JLabel tipoInfo = new JLabel("Especial");
             JLabel labelExtra = new JLabel("Limite: ");
@@ -316,10 +307,7 @@ public class MenuPrincipal extends JFrame {
         System.out.printf("Nome:           %s\n", Cconta.getNome());
         System.out.printf("Numero:         %d\n", Cconta.getNumeroConta());
         System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
-        
-         
     }
-	
 	
 	public static void transferirDinheiro(Conta Cconta[], int nCCliente) {///Em banco para inserir dinheiro nao precisa de senha, certo?
         JPanel menuAplicar = new JPanel();
@@ -337,6 +325,7 @@ public class MenuPrincipal extends JFrame {
         menuAplicar.add(numConta2);
         menuAplicar.add(labelValor);
         menuAplicar.add(infoValor);
+        menuAplicar.setPreferredSize(new Dimension(200,350));
         
         JOptionPane.showOptionDialog(null, menuAplicar,  "Transferir Dinheiro ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
         
@@ -350,9 +339,6 @@ public class MenuPrincipal extends JFrame {
             if(key2==99) {
                 JOptionPane.showMessageDialog(null, "Conta Destinada não encontrada");
             }else {
-            
-                ///Cconta[nConta2].depositar(Double.parseDouble(infoValor.getText()));
-                ///PARA NOÇÕES DE COMPREENÇÃO (Double.parseDouble(infoValor.getText())) IRA SER SAQUE
                 double saque=(Double.parseDouble(infoValor.getText()));
                 if(Cconta[key] instanceof Especial) {
                       ((Especial) Cconta[key]).sacar(saque);
@@ -377,15 +363,9 @@ public class MenuPrincipal extends JFrame {
                       }else {
                           JOptionPane.showMessageDialog(null, "Saldo insuficiente");
                       }
-           
                   }
-                
-                
             }
-        }
-            
-            
-        
+        } 
     }
 	
 	public static void mudarLimJuros(Conta Cconta[], int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
@@ -401,6 +381,7 @@ public class MenuPrincipal extends JFrame {
 
         menuMudarLimJuros.add(labalLimJuros);
         menuMudarLimJuros.add(infoLimJuros);
+        menuMudarLimJuros.setPreferredSize(new Dimension(200,350));
         
         JOptionPane.showOptionDialog(null, menuMudarLimJuros,  "Alterar ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
         
@@ -422,14 +403,6 @@ public class MenuPrincipal extends JFrame {
         }
     }
 	
-	
-	
-	
-	
-	
-	///PECADO FIM
-	
-	
 	private JButton bGerente;
 	private JButton bCliente;
 	private JLabel msgEscolha;
@@ -445,7 +418,6 @@ public class MenuPrincipal extends JFrame {
 	JPasswordField senhaConta = new JPasswordField(10);
 	String[] opcoes = new String[]{"Confirmar", "Cancelar"};
 	
-	
 	///Menu Gerente
 	JPanel menuGerentePainel = new JPanel();
 	String[] opcoesMenuGerente = new String[] {"Selecione uma opção","Verificar o nom...","Visualizar info...", "Faz uma aplicaç...", 
@@ -453,7 +425,6 @@ public class MenuPrincipal extends JFrame {
 												"Cadastrar outro...", "Alterar Senha"};
 	
 	JComboBox menuGerente = new JComboBox(opcoesMenuGerente);
-	
 	
 	///Menu Cliente
 	JPanel menuClientePainel = new JPanel();
@@ -464,7 +435,7 @@ public class MenuPrincipal extends JFrame {
 	
 	///Criar Conta
 	JPanel menuCriarContaPainel = new JPanel();
-	JLabel labelNome = new JLabel("Nome: ");
+	JLabel labelNome = new JLabel("Nome de Usuário: ");
 	JTextField txtNome = new JTextField(10);
 	JPasswordField senhaConta2 = new JPasswordField(10);
 	String[] tipodeconta = new String[] {"Selecione o tipo de Conta","Corrente", "Poupança", "Especial"};
@@ -479,14 +450,9 @@ public class MenuPrincipal extends JFrame {
 	Contagerente[] Contag = new Contagerente[10];
 	Conta[] Cconta = new Conta[10];
 	
-
-	
-	
-	
 	public MenuPrincipal() {
 		super("Banco da PUC");
 		setLayout(new FlowLayout());
-		
 		
 		msgEscolha = new JLabel("Por favor, escolha o tipo de conta que deseja acessar");
 		add(msgEscolha);
@@ -497,66 +463,54 @@ public class MenuPrincipal extends JFrame {
 		bCliente = new JButton("Cliente");
 		add(bCliente);
 		
-		
-		
 		ButtonHandler handler = new ButtonHandler();
 		bGerente.addActionListener(handler);
 		bCliente.addActionListener(handler);
-		
-		
-		
-
-
 	}
 	
 	private class ButtonHandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			///Se código não funcionar, mudar isto
-			
-			
+
 			Contag[0] = new Contagerente();
 			Contag[0].setNumeroConta(400);
 			Contag[0].alterarSenha("default", "400");
 			Contag[0].setgQueCadastrou(0);
 			Contag[0].setNome("Gerente Primeiro");
 		
-			
-			///validacaoAdd
 			validacao.add(labelLogin);
 			validacao.add(numConta);
 			validacao.add(labelSenha);
 			validacao.add(senhaConta);
-			
-			
 			
 			if(event.getActionCommand()== "Gerente"){
 				opcao = JOptionPane.showOptionDialog(null, validacao, "Tela de Login", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
 				
 					if(opcao==0) {
 						///NUMERO DA CONTA
-						contaKey = Integer.parseInt(numConta.getText());
 						
+						contaKey = Integer.parseInt(numConta.getText());
 						contaGerenteAtiva=acharConta(Contag, contaKey, nCGerente);
+						
 						if(contaGerenteAtiva==99) {
 							JOptionPane.showMessageDialog(null, "Conta não encontrada");
 							
 						}else {
-							///SENHA 
+							///SENHA
+							
 							senha = String.valueOf(senhaConta.getPassword());
 							
 							if(Contag[contaGerenteAtiva].conferirSenha(senha)==0) {
 								JOptionPane.showMessageDialog(null, "Senha incorreta");
 							}
 							else {
-								
-								
 								///GERENTE VALIDADO
-						
+								
 								menuGerentePainel.add(menuGerente);
 								
 								opcao = JOptionPane.showOptionDialog(null, menuGerentePainel, "Menu Gerente", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
 								opcao2 = menuGerente.getSelectedIndex();
+								
 								if(opcao==0){
 									switch(opcao2) {
 									case 1:
@@ -566,7 +520,6 @@ public class MenuPrincipal extends JFrame {
 												imprimirDado(Cconta[temp]);
 											}
 										}
-										
 										for(temp=0; temp<nCGerente; temp++) {
 											if(contaGerenteAtiva==Contag[temp].getgQueCadastrou()){
 												imprimirDado(Contag[temp]);
@@ -580,7 +533,6 @@ public class MenuPrincipal extends JFrame {
 										if(key==1){
 											for(temp=0; temp<nCCliente; temp++) {
 												imprimirDado(Cconta[temp]);
-										
 											}
 										}
 										else { 
@@ -615,7 +567,6 @@ public class MenuPrincipal extends JFrame {
 										break;
 										
 									case 7:///cadastrar outros usuarios
-										
 										menuCriarContaPainel2.add(labelNome);
 										menuCriarContaPainel2.add(txtNome);
 										menuCriarContaPainel2.add(labelSenha);
@@ -628,8 +579,8 @@ public class MenuPrincipal extends JFrame {
 											
 											///CASO A PESSOA NÃO COLQOUE NADA, ELA IRÁ CRIAR UMA CONTA CORRENTE
 											if(opcao2==4){///Gerente
-												Contag[nCGerente] = new Contagerente();
 												
+												Contag[nCGerente] = new Contagerente();
 											}else {///Especial
 												if(opcao2==3) {
 													///Default do set de limite será 500 reais
@@ -649,7 +600,6 @@ public class MenuPrincipal extends JFrame {
 												}
 											}
 											
-										
 											if(opcao2==4) {
 												criarContaG(Contag[nCGerente], nCGerente, contaGerenteAtiva, String.valueOf(txtNome.getText()),String.valueOf(senhaConta2.getPassword()));
 												System.out.printf("\n %d \n", Contag[nCGerente].getNumeroConta());
@@ -662,23 +612,17 @@ public class MenuPrincipal extends JFrame {
 												nCCliente++;
 											}
 										}
-										
-										
-										
-										
 										break;
 										
 									case 8:///mudar senha
 										mudarSenha(Cconta, key, nCCliente);
 										break;
+										
 									}
 								}
 							}
 						}
 					}
-	
-					
-				
 			}
 			
 			else{
@@ -691,12 +635,12 @@ public class MenuPrincipal extends JFrame {
 				if(opcao==0){
 					switch (opcao2) {
 					case 1:///criar conta OK
-						
 						menuCriarContaPainel.add(labelNome);
 						menuCriarContaPainel.add(txtNome);
 						menuCriarContaPainel.add(labelSenha);
 						menuCriarContaPainel.add(senhaConta2);
 						menuCriarContaPainel.add(comboBoxTipodeConta);
+						menuCriarContaPainel.setPreferredSize(new Dimension(200,350));
 						
 						opcao = JOptionPane.showOptionDialog(null, menuCriarContaPainel, "Criar Conta", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
 						opcao2 = comboBoxTipodeConta.getSelectedIndex();
@@ -751,15 +695,8 @@ public class MenuPrincipal extends JFrame {
 					default:
 						break;
 					}	
-					
 				}
-				/*validacao.setTipoUsuario(2); //2=Cliente.
-				validacao.setLocationRelativeTo(getFocusOwner());
-				validacao.setSize(350,100);
-				validacao.setVisible(true);*/
 			}
 		}
 	}
-	
-
 }
