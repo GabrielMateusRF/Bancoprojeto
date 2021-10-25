@@ -1,3 +1,4 @@
+import javax.swing.JOptionPane;
 
 public abstract class Conta {
 
@@ -71,14 +72,14 @@ public abstract class Conta {
 		if(senhaAntiga.equals(senha))
 		{
 			if(!senha.equals("default")) {
-				System.out.printf("\n Senha alterada com sucesso\n");
+				JOptionPane.showMessageDialog(null, "Senha alterada com socesso!");
 			}
 			senha=senhaNova;
 			
 			
 		}else
 		{
-			System.out.printf("\n Senha antiga incorreta\n");
+			JOptionPane.showMessageDialog(null, "Senha errada");
 		}
 	}
 	

@@ -78,39 +78,98 @@ public class MenuPrincipal extends JFrame {
 		Contag.setgQueCadastrou(gerente);
 	}
 	
-	public static void aplicarDinheiro(Conta Cconta) {///Em banco para inserir dinheiro nao precisa de senha, certo?
-		Scanner input = new Scanner(System.in);
-		System.out.printf("Conta numero: %d \nCliente: %s\nDigite o valor inserido: ", Cconta.getNumeroConta(), Cconta.getNome());
-		Cconta.depositar(input.nextDouble());
-		System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
-	}
-	
-	public static void retirarDinheiro(Conta Cconta) {///Precisa de senha
-        String senha;
-        float saque;
-        Scanner input = new Scanner(System.in);
-        System.out.printf("Conta numero: %d \nCliente: %s\nDigite a senha: ", Cconta.getNumeroConta(), Cconta.getNome());
-        senha=input.next();
-        if(Cconta.conferirSenha(senha)==1) {
-            System.out.printf("Quanto deseja sacar?: ");
-            saque = input.nextFloat();
-            if(Cconta instanceof Especial) {
-                ((Especial) Cconta).sacar(saque);
-                System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
-            }else if(Cconta instanceof Corrente){
-                ((Corrente) Cconta).sacar(saque);
-                System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
-            }else {
-                ((Poupanca) Cconta).sacar(saque);
-                System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
-            }
+	public static void aplicarDinheiro(Conta Cconta[], int nCCliente) {///Em banco para inserir dinheiro nao precisa de senha, certo?
+        JPanel menuAplicar = new JPanel();
+        JLabel labelNumConta = new JLabel("Digite o número da conta que deseja aplicar Dinheiro: ");
+        JTextField numConta = new JTextField(10);
+        JLabel labelValor = new JLabel("Digite o quanto Deseja Aplicar R$:");
+        JTextField infoValor = new JTextField(10);
+        String[] opcoes = new String[]{"Confirmar", "Fechar"};
+        
+        menuAplicar.add(labelNumConta);
+        menuAplicar.add(numConta);
+        menuAplicar.add(labelValor);
+        menuAplicar.add(infoValor);
+        
+        JOptionPane.showOptionDialog(null, menuAplicar,  "Aplicar Dinheiro ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+        
+        int nConta= (Integer.parseInt(numConta.getText()));
+        System.out.printf("/n %d /n", nConta);
+        System.out.printf("/n %d /n", nCCliente);
+        int key= acharConta(Cconta, nConta, nCCliente);
+        if(key==99) {
+            JOptionPane.showMessageDialog(null, "Conta não encontrada");
         }else {
-            System.out.println("SENHA ERRADA");
+            Cconta[key].depositar(Double.parseDouble(infoValor.getText()));
+        }
+        /*System.out.printf("Conta numero: %d \nCliente: %s\nDigite o valor inserido: ", Cconta.getNumeroConta(), Cconta.getNome());
+        Cconta.depositar(input.nextDouble());
+        System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());*/
+    }
+	
+	public static void retirarDinheiro(Conta Cconta[], int nCCliente) {///Precisa de senha
+        JPanel menuRetirar = new JPanel();
+        JLabel labelNumConta = new JLabel("Digite o número da conta que deseja aplicar Dinheiro: ");
+        JTextField numConta = new JTextField(10);
+        JLabel labelSenha = new JLabel("Digite a Senha: ");
+        JPasswordField senhaInfo = new JPasswordField(10);
+        JLabel labelValor = new JLabel("Digite o quanto Deseja Retirar R$:");
+        JTextField infoValor = new JTextField(10);
+        String[] opcoes = new String[]{"Confirmar", "Fechar"};
+        
+        menuRetirar.add(labelNumConta);
+        menuRetirar.add(numConta);
+        menuRetirar.add(labelSenha);
+        menuRetirar.add(senhaInfo);
+        menuRetirar.add(labelValor);
+        menuRetirar.add(infoValor);
+        
+        JOptionPane.showOptionDialog(null, menuRetirar,  "Retirar Dinheiro ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+        
+        int nConta= (Integer.parseInt(numConta.getText()));
+        System.out.printf("/n %d /n", nConta);
+        System.out.printf("/n %d /n", nCCliente);
+        int key= acharConta(Cconta, nConta, nCCliente);
+        if(key==99) {
+            JOptionPane.showMessageDialog(null, "Conta não encontrada");
+        }else {
+            if(Cconta[key].conferirSenha(String.valueOf(senhaInfo.getPassword()))==0) {
+                JOptionPane.showMessageDialog(null, "Senha incorreta");
+            }
+            else{
+                double saque=(Double.parseDouble(infoValor.getText()));
+                if(Cconta[key] instanceof Especial) {
+                      ((Especial) Cconta[key]).sacar(saque);
+                      if(Cconta[key].getSaldo()+ ((Especial) Cconta[key]).getLimite() -saque>=0) {
+                          ((Especial) Cconta[key]).sacar(saque);
+                      }else {
+                          JOptionPane.showMessageDialog(null, "Saldo + limite insuficiente");
+                      }
+                  }else if(Cconta[key] instanceof Corrente){
+                      if(Cconta[key].getSaldo()-saque>=0) {
+                          ((Corrente) Cconta[key]).sacar(saque);
+                        
+                      }else {
+                          JOptionPane.showMessageDialog(null, "Saldo insuficiente");
+                
+                      }
+                  }else {
+                      if(Cconta[key].getSaldo()-saque>0) {
+                          ((Poupanca) Cconta[key]).sacar(saque);
+                  
+                      }else {
+                          JOptionPane.showMessageDialog(null, "Saldo insuficiente");
+                      }
+           
+                  }
+            }
+            
         }
     }
 	
 	
 	public static void retirarDinheirog(Conta Cconta, int gerente) {///Precisa de senha
+
         String senha;
         float saque;
         Scanner input = new Scanner(System.in);
@@ -132,105 +191,242 @@ public class MenuPrincipal extends JFrame {
             System.out.println("Você não é o gerente desse cliente\n");
         }
     }
-	public static void consultarSaldo(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
-		String senha;
-		Scanner input = new Scanner(System.in);
-		System.out.printf("Conta numero: %d \nCliente: %s\nDigite a senha: ", Cconta.getNumeroConta(), Cconta.getNome());
-		senha=input.next();
-		if(Cconta.conferirSenha(senha)==1) {
-
-			System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
-		}else {
-			System.out.println("SENHA ERRADA");
+	
+	public static void consultarSaldo(Conta Cconta[],int key, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
+		JPanel menuConsultarSaldo = new JPanel();
+		JLabel labelLogin = new JLabel("Número da conta que deseja Consultar o saldo:");
+		JLabel labelSenha = new JLabel("Senha: ");
+		JTextField txtNome = new JTextField(10);
+		JPasswordField senhaConta = new JPasswordField(10);
+		
+		JLabel labelInfos1 = new JLabel("Conta numero: " + Cconta[key].getNumeroConta());
+		JLabel labelInfos2 = new JLabel("Cliente: " + Cconta[key].getNome());
+		JLabel labelInfos3 = new JLabel("Saldo atual: " + Cconta[key].getSaldo());
+		
+		String[] opcoes = new String[]{"Confirmar", "Fechar"};
+		int opcao;
+		
+		menuConsultarSaldo.add(labelLogin);
+		menuConsultarSaldo.add(txtNome);
+		menuConsultarSaldo.add(labelSenha);
+		menuConsultarSaldo.add(senhaConta);
+		
+		opcao = JOptionPane.showOptionDialog(null, menuConsultarSaldo, "Saldo", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+		
+		key=Integer.parseInt(String.valueOf(txtNome.getText()));
+		key=acharConta(Cconta, key, nCCliente);
+		while(opcao ==0) {
+			if(key!=99) {
+				String senha;
+				System.out.printf("Conta numero: %d \nCliente: %s\nDigite a senha: ", Cconta[key].getNumeroConta(), Cconta[key].getNome());
+				menuConsultarSaldo.add(labelInfos1);
+				menuConsultarSaldo.add(labelInfos2);
+				
+				senha=String.valueOf(senhaConta.getPassword());
+				if(Cconta[key].conferirSenha(senha)==1) {
+					menuConsultarSaldo.add(labelInfos3);
+					opcao = JOptionPane.showOptionDialog(null, menuConsultarSaldo, "Saldo", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+				}else {
+					JOptionPane.showMessageDialog(null, "Senha errada");
+				}
+			}else {
+				JOptionPane.showMessageDialog(null, "Conta não encontrada");
+			}
 		}
 	}
 		
-	public static void mudarSenha(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
-		String senha, senhaNova;
-		Scanner input = new Scanner(System.in);
-		System.out.printf("Conta numero: %d \nCliente: %s\nDigite a senha: ", Cconta.getNumeroConta(), Cconta.getNome());
-		senha=input.next();
-		if(Cconta.conferirSenha(senha)==1) {
-			System.out.printf("Digite a nova senha: ");
-			senhaNova=input.next();
-			Cconta.alterarSenha(senha, senhaNova);
-		}else {
-			System.out.println("SENHA ERRADA");
+	public static void mudarSenha(Conta Cconta[], int key,int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
+		JPanel menuAlterarSenhaPainel = new JPanel();
+		JLabel labelLogin = new JLabel("Número da conta que deseja alterar a senha: ");
+		JLabel labelSenha = new JLabel("Senha antiga: ");
+		JLabel labelSenha2 = new JLabel("Nova senha: ");
+		JTextField txtNome = new JTextField(10);
+		JPasswordField senhaConta = new JPasswordField(10);
+		JPasswordField senhaConta2 = new JPasswordField(10);
+		String[] opcoes = new String[]{"Confirmar", "Fechar"};
+		int opcao;
+		
+		
+		menuAlterarSenhaPainel.add(labelLogin);
+		menuAlterarSenhaPainel.add(txtNome);
+		menuAlterarSenhaPainel.add(labelSenha);
+		menuAlterarSenhaPainel.add(senhaConta);
+		menuAlterarSenhaPainel.add(labelSenha2);
+		menuAlterarSenhaPainel.add(senhaConta2);
+		
+		opcao = JOptionPane.showOptionDialog(null, menuAlterarSenhaPainel, "Alterar Senha", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+		
+
+		
+		if(opcao == 0) {
+			key=Integer.parseInt(txtNome.getText());
+			key=acharConta(Cconta, key, nCCliente);
+			if(key!=99) {
+				Cconta[key].alterarSenha(String.valueOf(senhaConta.getPassword()), String.valueOf(senhaConta2.getPassword()));
+			}else {
+				JOptionPane.showMessageDialog(null, "Conta não encontrada");
+			}
 		}
 	}
 	
 	public static void imprimirDado(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
-		Scanner input = new Scanner(System.in);
-		System.out.printf("\nDADOS DA CONTA");
-		System.out.printf("\n--------------\n");
-		System.out.printf("Nome:   		%s\n", Cconta.getNome());
-		System.out.printf("Numero: 		%d\n", Cconta.getNumeroConta());
-		System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
-		
-		 if(Cconta instanceof Especial) {
-			 System.out.printf("Tipo de conta: Especial\n");
-			 System.out.printf("Limite: %.2f\n", ((Especial)Cconta).getLimite());
-         }else if(Cconta instanceof Corrente){
-        	 System.out.printf("Tipo de conta: Corrente\n");
-        	 
-         }else if (Cconta instanceof Poupanca){
-             System.out.printf("Tipo de conta: Poupança\n");
-             System.out.printf("juros: %.2f\n", ((Poupanca)Cconta).getJuros());
-         }else if(Cconta instanceof Contagerente) {
-        	 System.out.printf("Tipo de conta: Gerente\n");
-         }
-	}
-	
-	
-	public static void transferirDinheiro(Conta Cconta, Conta Cconta2) {///Em banco para inserir dinheiro nao precisa de senha, certo?
-		Scanner input = new Scanner(System.in);
-		double saque;
-		System.out.printf("Conta Depositadora \nnumero: %d \nCliente: %s\nConta Transferidora \nnumero: %d \nCliente: %s\nDigite o valor a ser transferido: ", Cconta.getNumeroConta(), Cconta.getNome(),  Cconta2.getNumeroConta(), Cconta2.getNome());
-		saque=input.nextDouble();
-			if(Cconta instanceof Especial) {
-              ((Especial) Cconta).sacar(saque);
-              if(Cconta.getSaldo()+ ((Especial) Cconta).getLimite() -saque>=0) {
-	              ((Especial) Cconta).sacar(saque);
-	              Cconta2.depositar(saque);
-        	  }else {
-        		  System.out.println("Saldo + limite insuficiente");
-        	  }
-          }else if(Cconta instanceof Corrente){
-        	  if(Cconta.getSaldo()-saque>=0) {
-	              ((Corrente) Cconta).sacar(saque);
-	              Cconta2.depositar(saque);
-        	  }else {
-        		  System.out.println("Saldo insuficiente");
-        	  }
-          }else {
-              if(Cconta.getSaldo()-saque>0) {
-            	  ((Poupanca) Cconta).sacar(saque);
-                  Cconta2.depositar(saque);
-        	  }else {
-        		  System.out.println("Saldo insuficiente");
-        	  }
-          }
-		
-		
-		System.out.printf("Saldo atual da conta : %.2f\n", Cconta.getSaldo());
-	}
-	
-	public static void mudarLimJuros(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
-		Scanner input = new Scanner(System.in);
-		if(Cconta instanceof Especial) {
-			System.out.printf("Limite Atual: %.2f \n", ((Especial) Cconta).getLimite());
-			System.out.println("Digite o limite novo:");
-            ((Especial) Cconta).setLimite(input.nextDouble());
-			
-        }else if(Cconta instanceof Poupanca){
-        	System.out.printf("Juros Atual: %.2f \n", ((Poupanca) Cconta).getJuros());
-        	System.out.println("Digite o juros novo:");
-        	 ((Poupanca) Cconta).setJuros(input.nextDouble());
-        }else {
-           
-            System.out.printf("Conta Não Especial ou Poupança");
+        Scanner input = new Scanner(System.in);
+        
+        
+        JPanel menuImpDados = new JPanel();
+        JLabel labelNome = new JLabel("Nome: ");
+        JLabel nomeInfo = new JLabel(Cconta.getNome());
+        JLabel labelNumero = new JLabel("Conta Nº:");
+        JLabel numeroInfo = new JLabel(Integer.toString(Cconta.getNumeroConta()));
+        JLabel labelSaldo = new JLabel("Saldo Atual R$:");
+        JLabel saldoInfo = new JLabel(Double.toString(Cconta.getSaldo()));
+        JLabel labelTipo = new JLabel("Tipo De Conta: ");
+        
+        String[] opcoes = new String[]{"Continuar", "Fechar"};
+        
+        //JOptionPane.showOptionDialog(null, menuClientePainel, "Menu Cliente", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null,  opcoes, opcoes[1]);
+        
+        
+        
+        menuImpDados.add(labelNome);
+        menuImpDados.add(nomeInfo);
+        menuImpDados.add(labelNumero);
+        menuImpDados.add(numeroInfo);
+        menuImpDados.add(labelSaldo);
+        menuImpDados.add(saldoInfo);
+        menuImpDados.add(labelTipo);
+        if(Cconta instanceof Especial) {
+            JLabel tipoInfo = new JLabel("Especial");
+            JLabel labelExtra = new JLabel("Limite: ");
+            JLabel infoExtra = new JLabel(Double.toString(((Especial) Cconta).getLimite()));
+            menuImpDados.add(tipoInfo);
+            menuImpDados.add(labelExtra);
+            menuImpDados.add(infoExtra);
+        }else if(Cconta instanceof Corrente){
+            JLabel tipoInfo = new JLabel("Corrente");
+            menuImpDados.add(tipoInfo);
+        }else if (Cconta instanceof Poupanca){
+            JLabel tipoInfo = new JLabel("Poupança");
+            JLabel labelExtra = new JLabel("Juros: ");
+            JLabel infoExtra = new JLabel(Double.toString(((Poupanca)Cconta).getJuros()));
+            menuImpDados.add(tipoInfo);
+            menuImpDados.add(labelExtra);
+            menuImpDados.add(infoExtra);
+        }else if(Cconta instanceof Contagerente) {
+            System.out.printf("Tipo de conta: Gerente\n");
         }
-	}
+        JOptionPane.showOptionDialog(null, menuImpDados,  "Dados da conta ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+        
+        System.out.printf("\nDADOS DA CONTA");
+        System.out.printf("\n--------------\n");
+        System.out.printf("Nome:           %s\n", Cconta.getNome());
+        System.out.printf("Numero:         %d\n", Cconta.getNumeroConta());
+        System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
+        
+         
+    }
+	
+	
+	public static void transferirDinheiro(Conta Cconta[], int nCCliente) {///Em banco para inserir dinheiro nao precisa de senha, certo?
+        JPanel menuAplicar = new JPanel();
+        JLabel labelNumConta1 = new JLabel("Digite o número da conta que deseja Remover o dinheiro: ");
+        JTextField numConta1 = new JTextField(10);
+        JLabel labelNumConta2 = new JLabel("Digite o número da conta que deseja Depositar o dinheiro: ");
+        JTextField numConta2 = new JTextField(10);
+        JLabel labelValor = new JLabel("Digite o quanto Deseja Transferir R$:");
+        JTextField infoValor = new JTextField(10);
+        String[] opcoes = new String[]{"Confirmar", "Fechar"};
+        
+        menuAplicar.add(labelNumConta1);
+        menuAplicar.add(numConta1);
+        menuAplicar.add(labelNumConta2);
+        menuAplicar.add(numConta2);
+        menuAplicar.add(labelValor);
+        menuAplicar.add(infoValor);
+        
+        JOptionPane.showOptionDialog(null, menuAplicar,  "Transferir Dinheiro ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+        
+        int nConta1= (Integer.parseInt(numConta1.getText()));
+        int nConta2= (Integer.parseInt(numConta2.getText()));
+        int key= acharConta(Cconta, nConta1, nCCliente);
+        if(key==99) {
+            JOptionPane.showMessageDialog(null, "Conta Originaria não encontrada");
+        }else {
+            int key2= acharConta(Cconta, nConta2, nCCliente);
+            if(key2==99) {
+                JOptionPane.showMessageDialog(null, "Conta Destinada não encontrada");
+            }else {
+            
+                ///Cconta[nConta2].depositar(Double.parseDouble(infoValor.getText()));
+                ///PARA NOÇÕES DE COMPREENÇÃO (Double.parseDouble(infoValor.getText())) IRA SER SAQUE
+                double saque=(Double.parseDouble(infoValor.getText()));
+                if(Cconta[key] instanceof Especial) {
+                      ((Especial) Cconta[key]).sacar(saque);
+                      if(Cconta[key].getSaldo()+ ((Especial) Cconta[nConta1]).getLimite() -saque>=0) {
+                          ((Especial) Cconta[key]).sacar(saque);
+                          Cconta[key2].depositar(saque);
+                      }else {
+                          JOptionPane.showMessageDialog(null, "Saldo + limite insuficiente");
+                      }
+                  }else if(Cconta[key] instanceof Corrente){
+                      if(Cconta[key].getSaldo()-saque>=0) {
+                          ((Corrente) Cconta[key]).sacar(saque);
+                          Cconta[key2].depositar(saque);
+                      }else {
+                          JOptionPane.showMessageDialog(null, "Saldo insuficiente");
+                
+                      }
+                  }else {
+                      if(Cconta[key].getSaldo()-saque>0) {
+                          ((Poupanca) Cconta[key]).sacar(saque);
+                          Cconta[key2].depositar(saque);
+                      }else {
+                          JOptionPane.showMessageDialog(null, "Saldo insuficiente");
+                      }
+           
+                  }
+                
+                
+            }
+        }
+            
+            
+        
+    }
+	
+	public static void mudarLimJuros(Conta Cconta[], int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
+        JPanel menuMudarLimJuros = new JPanel();
+        JLabel labelNumConta1 = new JLabel("Digite o número da Conta: ");
+        JTextField numConta1 = new JTextField(10);
+        JLabel labalLimJuros = new JLabel("Digite o Limite ou a porcentagem de Juros que deseja Alterar");
+        JTextField infoLimJuros = new JTextField(10);
+        String[] opcoes = new String[]{"Confirmar", "Fechar"};
+        
+        menuMudarLimJuros.add(labelNumConta1);
+        menuMudarLimJuros.add(numConta1);
+
+        menuMudarLimJuros.add(labalLimJuros);
+        menuMudarLimJuros.add(infoLimJuros);
+        
+        JOptionPane.showOptionDialog(null, menuMudarLimJuros,  "Alterar ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+        
+        int nConta1= (Integer.parseInt(numConta1.getText()));
+        int key= acharConta(Cconta, nConta1, nCCliente);
+        if(key==99) {
+            JOptionPane.showMessageDialog(null, "Conta não encontrada");
+        }else {
+            
+            if(Cconta[key] instanceof Especial) {
+                 ((Especial) Cconta[key]).setLimite((Double.parseDouble(infoLimJuros.getText())));
+                 JOptionPane.showMessageDialog(null, "Limite Atualizado");
+              }else if(Cconta[key] instanceof Corrente){
+                  JOptionPane.showMessageDialog(null, "Conta Corrente não tem Limite ou Juros");
+              }else {
+                  ((Poupanca) Cconta[key]).setJuros((Double.parseDouble(infoLimJuros.getText())));
+                  JOptionPane.showMessageDialog(null, "Juros Atualizado");
+              }
+        }
+    }
 	
 	
 	
@@ -284,6 +480,7 @@ public class MenuPrincipal extends JFrame {
 	//Alocacao
 	Contagerente[] Contag = new Contagerente[10];
 	Conta[] Cconta = new Conta[10];
+	
 
 	
 	
@@ -377,6 +574,7 @@ public class MenuPrincipal extends JFrame {
 											}
 										}
 										break;
+										
 									case 2://ok
 										System.out.printf("Deseja: \n1)Imprimir lista de clientes\n2)Imprimir dados de uma conta especifica\n");
 										//key=input.nextInt();
@@ -400,61 +598,23 @@ public class MenuPrincipal extends JFrame {
 										}
 										
 										break;
+										
 									case 3:///igual ao aplicar
-										System.out.printf("Digite no número da conta na qual deseja aplicar dinheiro:");
-										///key=input.nextInt();
-										key=acharConta(Cconta, key, nCCliente);
-										if(key!=99) {
-											aplicarDinheiro(Cconta[key]);
-										}else {
-											System.out.println("Conta não encontrada");
-										}
+										aplicarDinheiro(Cconta, nCCliente);
 										break;
+										
 									case 4:///Transferir ok
-										System.out.printf("Digite no número da conta da qual sairá o dinheiro:");
-										///key=input.nextInt();
-										key=acharConta(Cconta, key, nCCliente);
-										temp=key;
-										if(key!=99) {
-											System.out.printf("Digite no número da conta na qual o dinheiro será transferido:");
-											///key=input.nextInt();
-											key=acharConta(Cconta, key, nCCliente);
-											if((key!=99) && (temp!=key)){
-												transferirDinheiro(Cconta[temp], Cconta[key]);
-											}else {
-												if(temp==key){
-													System.out.println("Você não pode transferir dinheiro para a mesma conta");
-												}else {
-													System.out.println("Conta não encontrada");
-												}
-											}
-										}else {
-											System.out.println("Conta não encontrada");
-										}
-										
-										
+										transferirDinheiro(Cconta, nCCliente);
 										break;
+										
 									case 5:///ok
-										System.out.printf("Digite no número da conta na qual deseja retirar dinheiro:");
-										///key=input.nextInt();
-										key=acharConta(Cconta, key, nCCliente);
-										if(key!=99) {
-											retirarDinheirog(Cconta[key], contaGerenteAtiva);
-										}else {
-											System.out.println("Conta não encontrada");
-										}
+										retirarDinheiro(Cconta, nCCliente);
 										break;
-									case 6:///Cadastrar/editar limites
-										System.out.printf("Digite no número da conta na qual deseja mudar o limite se for especial ou a taxa de juros se for poupança:");
-										///key=input.nextInt();
-										key=acharConta(Cconta, key, nCCliente);
-										if(key!=99) {
-											mudarLimJuros(Cconta[key]);
-										}else {
-											System.out.println("Conta não encontrada");
-										}
 										
+									case 6:///Cadastrar/editar limites
+										mudarLimJuros(Cconta, nCCliente);
 										break;
+										
 									case 7:///cadastrar outros usuarios
 										/*escolha=mensagemCriarContaG();
 										if(escolha==1) {///Corrente
@@ -486,8 +646,9 @@ public class MenuPrincipal extends JFrame {
 										
 										
 										break;
+										
 									case 8:///mudar senha
-										mudarSenha(Contag[contaGerenteAtiva]);
+										mudarSenha(Cconta, key, nCCliente);
 										break;
 									}
 								}
@@ -505,10 +666,10 @@ public class MenuPrincipal extends JFrame {
 				
 				opcao = JOptionPane.showOptionDialog(null, menuClientePainel, "Menu Cliente", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null,  opcoes, opcoes[1]);
 				opcao2 = menuCliente.getSelectedIndex();
+				
 				if(opcao==0){
 					switch (opcao2) {
 					case 1:///criar conta OK
-						System.out.printf("Konami\n");
 						
 						menuCriarContaPainel.add(labelNome);
 						menuCriarContaPainel.add(txtNome);
@@ -547,47 +708,25 @@ public class MenuPrincipal extends JFrame {
 					
 					break;
 					case 2:///Aplicar dinheiro OK
-						System.out.printf("Digite no número da conta na qual deseja aplicar dinheiro:");
-						///key=input.nextInt();
-						key=acharConta(Cconta, key, nCCliente);
-						if(key!=99) {
-							aplicarDinheiro(Cconta[key]);
-						}else {
-							System.out.println("Conta não encontrada");
-						}
+						aplicarDinheiro(Cconta, nCCliente);
 						break;
+						
 					case 3:///Retirar Dinheiro NÃO FINALIZADO, FALTA CARA CARACTERISTICA
-						System.out.printf("Digite no número da conta na qual deseja retirar dinheiro:");
-						///key=input.nextInt();
-						key=acharConta(Cconta, key, nCCliente);
-						if(key!=99) {
-							retirarDinheiro(Cconta[key]);
-						}else {
-							System.out.println("Conta não encontrada");
-						}
+						retirarDinheiro(Cconta, nCCliente);
 						break;
+						
 					case 4:///Saldo OK
-						System.out.printf("Digite no número da conta na qual deseja Consultar o saldo:");
-						///key=input.nextInt();
-						key=acharConta(Cconta, key, nCCliente);
-						if(key!=99) {
-							consultarSaldo(Cconta[key]);
-						}else {
-							System.out.println("Conta não encontrada");
-						}
+						
+						consultarSaldo(Cconta,key,nCCliente);
 						break;
+						
 					case 5:///verificar extratos NÃO FEITO
 						break;
+						
 					case 6:///alterar senha OK
-						System.out.printf("Digite no número da conta na qual deseja Mudar a senha:");
-						///key=input.nextInt();
-						key=acharConta(Cconta, key, nCCliente);
-						if(key!=99) {
-							mudarSenha(Cconta[key]);
-						}else {
-							System.out.println("Conta não encontrada");
-						}
+						mudarSenha(Cconta, key, nCCliente);
 						break;
+						
 					default:
 						break;
 					}	
