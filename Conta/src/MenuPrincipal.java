@@ -225,7 +225,7 @@ public class MenuPrincipal extends JFrame {
 		}
 	}
 		
-	public static void mudarSenha(Conta Cconta[], int key,int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
+	public static void mudarSenha(Conta Cconta[], int key, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
 		JPanel menuAlterarSenhaPainel = new JPanel();
 		JLabel labelLogin = new JLabel("Número da conta: ");
 		JLabel labelSenha = new JLabel("Senha: ");
@@ -257,56 +257,61 @@ public class MenuPrincipal extends JFrame {
 		}
 	}
 	
-	public static void imprimirDado(Conta Cconta) {///Consultar saldo tbm precisa de senha? Yup
+	public static void imprimirDado(Conta Cconta[], int contaGerenteAtiva, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
         Scanner input = new Scanner(System.in);
-        
+        String[] opcoes = new String[]{"Fechar"};
         JPanel menuImpDados = new JPanel();
-        JLabel labelNome = new JLabel("Nome: ");
-        JLabel nomeInfo = new JLabel(Cconta.getNome());
-        JLabel labelNumero = new JLabel("Conta Nº:");
-        JLabel numeroInfo = new JLabel(Integer.toString(Cconta.getNumeroConta()));
-        JLabel labelSaldo = new JLabel("Saldo Atual R$:");
-        JLabel saldoInfo = new JLabel(Double.toString(Cconta.getSaldo()));
-        JLabel labelTipo = new JLabel("Tipo De Conta: ");
         
-        String[] opcoes = new String[]{"Continuar", "Fechar"};
+		for(int temp=0; temp<nCCliente; temp++) {
+			if(contaGerenteAtiva==Cconta[temp].getgQueCadastrou()){
+				
+		        JLabel labelNome = new JLabel("Nome: ");
+		        JLabel nomeInfo = new JLabel(Cconta[temp].getNome());
+		        JLabel labelNumero = new JLabel("Conta Nº:");
+		        JLabel numeroInfo = new JLabel(Integer.toString(Cconta[temp].getNumeroConta()));
+		        JLabel labelSaldo = new JLabel("Saldo Atual R$:");
+		        JLabel saldoInfo = new JLabel(Double.toString(Cconta[temp].getSaldo()));
+		        JLabel labelTipo = new JLabel("Tipo De Conta: ");
+		        JLabel labelDiv = new JLabel("________________________________");
+		        
+		        menuImpDados.add(labelDiv);
+		        menuImpDados.add(labelNome);
+		        menuImpDados.add(nomeInfo);
+		        menuImpDados.add(labelNumero);
+		        menuImpDados.add(numeroInfo);
+		        menuImpDados.add(labelSaldo);
+		        menuImpDados.add(saldoInfo);
+		        menuImpDados.add(labelTipo);
+		        menuImpDados.setPreferredSize(new Dimension(200,350));
+		        menuImpDados.setMaximumSize(new Dimension(200,350));
+		        menuImpDados.setAutoscrolls(true);
+		        
+		        if(Cconta[temp] instanceof Especial) {
+		            JLabel tipoInfo = new JLabel("Especial");
+		            JLabel labelExtra = new JLabel("Limite: ");
+		            JLabel infoExtra = new JLabel(Double.toString(((Especial) Cconta[temp]).getLimite()));
+		            menuImpDados.add(tipoInfo);
+		            menuImpDados.add(labelExtra);
+		            menuImpDados.add(infoExtra);
+		        }else if(Cconta[temp] instanceof Corrente){
+		            JLabel tipoInfo = new JLabel("Corrente");
+		            menuImpDados.add(tipoInfo);
+		        }else if (Cconta[temp] instanceof Poupanca){
+		            JLabel tipoInfo = new JLabel("Poupança");
+		            JLabel labelExtra = new JLabel("Juros: ");
+		            JLabel infoExtra = new JLabel(Double.toString(((Poupanca)Cconta[temp]).getJuros()));
+		            menuImpDados.add(tipoInfo);
+		            menuImpDados.add(labelExtra);
+		            menuImpDados.add(infoExtra);
+		        }else if(Cconta[temp] instanceof Contagerente) {
+		            System.out.printf("Tipo de conta: Gerente\n");
+		        }
+		        menuImpDados.add(labelDiv);
+			}
+		}
+		
+        JOptionPane.showOptionDialog(null, menuImpDados,  "Dados da conta ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[0]);
         
-        menuImpDados.add(labelNome);
-        menuImpDados.add(nomeInfo);
-        menuImpDados.add(labelNumero);
-        menuImpDados.add(numeroInfo);
-        menuImpDados.add(labelSaldo);
-        menuImpDados.add(saldoInfo);
-        menuImpDados.add(labelTipo);
-        menuImpDados.setPreferredSize(new Dimension(200,350));
-        
-        if(Cconta instanceof Especial) {
-            JLabel tipoInfo = new JLabel("Especial");
-            JLabel labelExtra = new JLabel("Limite: ");
-            JLabel infoExtra = new JLabel(Double.toString(((Especial) Cconta).getLimite()));
-            menuImpDados.add(tipoInfo);
-            menuImpDados.add(labelExtra);
-            menuImpDados.add(infoExtra);
-        }else if(Cconta instanceof Corrente){
-            JLabel tipoInfo = new JLabel("Corrente");
-            menuImpDados.add(tipoInfo);
-        }else if (Cconta instanceof Poupanca){
-            JLabel tipoInfo = new JLabel("Poupança");
-            JLabel labelExtra = new JLabel("Juros: ");
-            JLabel infoExtra = new JLabel(Double.toString(((Poupanca)Cconta).getJuros()));
-            menuImpDados.add(tipoInfo);
-            menuImpDados.add(labelExtra);
-            menuImpDados.add(infoExtra);
-        }else if(Cconta instanceof Contagerente) {
-            System.out.printf("Tipo de conta: Gerente\n");
-        }
-        JOptionPane.showOptionDialog(null, menuImpDados,  "Dados da conta ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
-        
-        System.out.printf("\nDADOS DA CONTA");
-        System.out.printf("\n--------------\n");
-        System.out.printf("Nome:           %s\n", Cconta.getNome());
-        System.out.printf("Numero:         %d\n", Cconta.getNumeroConta());
-        System.out.printf("Saldo atual: %.2f\n", Cconta.getSaldo());
     }
 	
 	public static void transferirDinheiro(Conta Cconta[], int nCCliente) {///Em banco para inserir dinheiro nao precisa de senha, certo?
@@ -448,7 +453,7 @@ public class MenuPrincipal extends JFrame {
 	
 	//Alocacao
 	Contagerente[] Contag = new Contagerente[10];
-	Conta[] Cconta = new Conta[10];
+	ContaCliente[] Cconta = new ContaCliente[10];
 	
 	public MenuPrincipal() {
 		super("Banco da PUC");
@@ -474,9 +479,9 @@ public class MenuPrincipal extends JFrame {
 
 			Contag[0] = new Contagerente();
 			Contag[0].setNumeroConta(400);
-			Contag[0].alterarSenha("default", "400");
+			Contag[0].alterarSenha("default", "admin");
 			Contag[0].setgQueCadastrou(0);
-			Contag[0].setNome("Gerente Primeiro");
+			Contag[0].setNome("admin");
 		
 			validacao.add(labelLogin);
 			validacao.add(numConta);
@@ -515,16 +520,8 @@ public class MenuPrincipal extends JFrame {
 									switch(opcao2) {
 									case 1:
 										///Vai precisar de alteracao no loop
-										for(temp=0; temp<nCCliente; temp++) {
-											if(contaGerenteAtiva==Cconta[temp].getgQueCadastrou()){
-												imprimirDado(Cconta[temp]);
-											}
-										}
-										for(temp=0; temp<nCGerente; temp++) {
-											if(contaGerenteAtiva==Contag[temp].getgQueCadastrou()){
-												imprimirDado(Contag[temp]);
-											}
-										}
+										imprimirDado(Cconta, contaGerenteAtiva, nCCliente);
+										imprimirDado(Contag, contaGerenteAtiva, nCGerente);
 										break;
 										
 									case 2://ok
@@ -532,7 +529,7 @@ public class MenuPrincipal extends JFrame {
 										//key=input.nextInt();
 										if(key==1){
 											for(temp=0; temp<nCCliente; temp++) {
-												imprimirDado(Cconta[temp]);
+												imprimirDado(Cconta, contaGerenteAtiva, temp);
 											}
 										}
 										else { 
@@ -541,7 +538,7 @@ public class MenuPrincipal extends JFrame {
 											//key=input.nextInt();
 											key=acharConta(Cconta, key, nCCliente);
 												if(key!=99) {
-													imprimirDado(Cconta[key]);
+													imprimirDado(Cconta, contaGerenteAtiva, nCCliente);
 												}else {
 													System.out.println("Conta não encontrada");
 												}
