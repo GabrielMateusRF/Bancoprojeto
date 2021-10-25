@@ -262,6 +262,44 @@ public class MenuPrincipal extends JFrame {
 		}
 	}
 	
+	
+	/*
+	public static void mudarSenha2(Usuario CUsuario[], int key, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
+		JPanel menuAlterarSenhaPainel = new JPanel();
+		JLabel labelLogin = new JLabel("Número da conta: ");
+		JLabel labelSenha = new JLabel("Senha: ");
+		JLabel labelSenha2 = new JLabel("Nova senha: ");
+		JTextField txtNome = new JTextField(10);
+		JPasswordField senhaConta = new JPasswordField(10);
+		JPasswordField senhaConta2 = new JPasswordField(10);
+		String[] opcoes = new String[]{"Confirmar", "Fechar"};
+		int opcao;
+		
+		menuAlterarSenhaPainel.add(labelLogin);
+		menuAlterarSenhaPainel.add(txtNome);
+		menuAlterarSenhaPainel.add(labelSenha);
+		menuAlterarSenhaPainel.add(senhaConta);
+		menuAlterarSenhaPainel.add(labelSenha2);
+		menuAlterarSenhaPainel.add(senhaConta2);
+		menuAlterarSenhaPainel.setPreferredSize(new Dimension(200,350));
+		
+		opcao = JOptionPane.showOptionDialog(null, menuAlterarSenhaPainel, "Alterar Senha", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+		
+		if(opcao == 0) {
+			key=Integer.parseInt(txtNome.getText());
+			key=acharConta(Cconta, key, nCCliente);
+			if(key!=99) {
+				Cconta[key].alterarSenha(String.valueOf(senhaConta.getPassword()), String.valueOf(senhaConta2.getPassword()));
+			}else {
+				JOptionPane.showMessageDialog(null, "Conta não encontrada");
+			}
+		}
+	}
+	
+	*/
+	
+	
+	
 	public static void imprimirDado(Conta Cconta[], int contaGerenteAtiva, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
         Scanner input = new Scanner(System.in);
         String[] opcoes = new String[]{"Fechar"};
@@ -317,6 +355,77 @@ public class MenuPrincipal extends JFrame {
 		
         JOptionPane.showOptionDialog(null, menuImpDados,  "Dados da conta ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[0]);
         
+    }
+	
+	public static void imprimirDado2(Conta Cconta[], int contaGerenteAtiva, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
+        Scanner input = new Scanner(System.in);
+        String[] opcoes = new String[]{"Confirmar","Fechar"};
+        JPanel menuImpDados = new JPanel();
+        int temp=0, opcao;
+        
+        JLabel labelNumInsere = new JLabel("Número da conta que deseja imprimir dados:");
+        JTextField nConta = new JTextField(10);
+        
+        menuImpDados.add(labelNumInsere);
+        menuImpDados.add(nConta);
+        
+        opcao = JOptionPane.showOptionDialog(null, menuImpDados,  "Dados da conta ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+        
+        if(opcao == 0) {
+	        for(temp=0; temp<nCCliente; temp++) {
+				if(contaGerenteAtiva==Cconta[temp].getgQueCadastrou()){
+					if(Cconta[temp].getNumeroConta()==Integer.parseInt(nConta.getText())) {
+						
+				        JLabel labelNome = new JLabel("Nome: ");
+				        JLabel nomeInfo = new JLabel(Cconta[temp].getNome());
+				        JLabel labelNumero = new JLabel("Conta Nº:");
+				        JLabel numeroInfo = new JLabel(Integer.toString(Cconta[temp].getNumeroConta()));
+				        JLabel labelSaldo = new JLabel("Saldo Atual R$:");
+				        JLabel saldoInfo = new JLabel(Double.toString(Cconta[temp].getSaldo()));
+				        JLabel labelTipo = new JLabel("Tipo De Conta: ");
+				        JLabel labelDiv = new JLabel("________________________________");
+						
+				        menuImpDados.remove(labelNumInsere);
+				        menuImpDados.remove(nConta);
+				        
+					 	menuImpDados.add(labelDiv);
+				        menuImpDados.add(labelNome);
+				        menuImpDados.add(nomeInfo);
+				        menuImpDados.add(labelNumero);
+				        menuImpDados.add(numeroInfo);
+				        menuImpDados.add(labelSaldo);
+				        menuImpDados.add(saldoInfo);
+				        menuImpDados.add(labelTipo);
+				        menuImpDados.setPreferredSize(new Dimension(200,350));
+				        menuImpDados.setMaximumSize(new Dimension(200,350));
+				        menuImpDados.setAutoscrolls(true);
+		        
+				        if(Cconta[temp] instanceof Especial) {
+				            JLabel tipoInfo = new JLabel("Especial");
+				            JLabel labelExtra = new JLabel("Limite: ");
+				            JLabel infoExtra = new JLabel(Double.toString(((Especial) Cconta[temp]).getLimite()));
+				            menuImpDados.add(tipoInfo);
+				            menuImpDados.add(labelExtra);
+				            menuImpDados.add(infoExtra);
+				        }else if(Cconta[temp] instanceof Corrente){
+				            JLabel tipoInfo = new JLabel("Corrente");
+				            menuImpDados.add(tipoInfo);
+				        }else if (Cconta[temp] instanceof Poupanca){
+				            JLabel tipoInfo = new JLabel("Poupança");
+				            JLabel labelExtra = new JLabel("Juros: ");
+				            JLabel infoExtra = new JLabel(Double.toString(((Poupanca)Cconta[temp]).getJuros()));
+				            menuImpDados.add(tipoInfo);
+				            menuImpDados.add(labelExtra);
+				            menuImpDados.add(infoExtra);
+				        }else if(Cconta[temp] instanceof Contagerente) {
+				            System.out.printf("Tipo de conta: Gerente\n");
+				        }
+				        menuImpDados.add(labelDiv);
+					}
+				}
+			}
+	        JOptionPane.showOptionDialog(null, menuImpDados,  "Dados da conta ", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
+        }
     }
 	
 	
@@ -572,25 +681,8 @@ public class MenuPrincipal extends JFrame {
 										break;
 										
 									case 2://ok
-										System.out.printf("Deseja: \n1)Imprimir lista de clientes\n2)Imprimir dados de uma conta especifica\n");
-										//key=input.nextInt();
-										if(key==1){
-											for(temp=0; temp<nCCliente; temp++) {
-												imprimirDado(Cconta, contaGerenteAtiva, temp);
-											}
-										}
-										else { 
-											if(key==2) {
-											System.out.printf("Digite o numero da conta: ");
-											//key=input.nextInt();
-											key=acharConta(Cconta, key, nCCliente);
-												if(key!=99) {
-													imprimirDado(Cconta, contaGerenteAtiva, nCCliente);
-												}else {
-													System.out.println("Conta não encontrada");
-												}
-											}
-										}
+										imprimirDado2(Cconta, contaGerenteAtiva, nCCliente);
+										imprimirDado2(Contag, contaGerenteAtiva, nCGerente);
 										
 										break;
 										
