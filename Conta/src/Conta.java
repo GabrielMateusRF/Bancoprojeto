@@ -1,12 +1,14 @@
+import javax.swing.JOptionPane;
 
 public abstract class Conta {
 
+	///NOTA, ainda há senha aqui, pois gerente naõ é um usuario, sendo assim é somente CONTA, tendo que ter senha
+	//Todos as outras contas sempre que é pedido senha, se refere a senha do USUARIO
 	private String nome;
 	private int numConta;
 	public double saldo=0;
 	private String senha="default";
 	public int gQueCadastrou;
-	
 	
 	public void setNumeroConta(int numero)///NUMERO CONTA
 	{
@@ -27,8 +29,7 @@ public abstract class Conta {
 	{
 		return nome;
 	}
-	
-	
+		
 	public double getSaldo()
 	{
 		return saldo;
@@ -43,27 +44,12 @@ public abstract class Conta {
 	}
 	
 
-	/*public void sacar(double valor) 
-	{
-		if(saldo==0) 
-		{///Caso conta nao tenha dinheiro
-			System.out.printf("\n Conta sem dinheiro\n");
-		}else 
-		{
-			if(valor>=saldo) 
-			{///Caso valor seja maior que o que tem na conta
-				System.out.printf("\nValor requerido maior que o que tem na conta\n");
-			}else ///Caso o saque aconteca
-			{
-				saldo-=valor;
-			}
-		}
-	}*/
 	
 	public void depositar (double valor)///deposita
 	{
 		saldo+=valor;
-		System.out.printf("\n Depositado com sucesso!\n");
+		
+		
 	}
 	
 	public void alterarSenha (String senhaAntiga, String senhaNova) 
@@ -71,14 +57,14 @@ public abstract class Conta {
 		if(senhaAntiga.equals(senha))
 		{
 			if(!senha.equals("default")) {
-				System.out.printf("\n Senha alterada com sucesso\n");
+				JOptionPane.showMessageDialog(null, "Senha alterada com socesso!");
 			}
 			senha=senhaNova;
 			
 			
 		}else
 		{
-			System.out.printf("\n Senha antiga incorreta\n");
+			JOptionPane.showMessageDialog(null, "Senha errada");
 		}
 	}
 	
@@ -86,8 +72,6 @@ public abstract class Conta {
 		if(senha.equals(senhadada)) {
 			return 1;
 		}else {
-			System.out.printf("SENHA: %s \n", senha);
-			System.out.printf("SENHA DIGITADO: %s \n", senhadada);
 			return 0;
 		}
 	}
