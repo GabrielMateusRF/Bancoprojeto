@@ -28,33 +28,6 @@ public class MenuPrincipal extends JFrame {
         return 99;
     }
 	
-	public static int mensagemCriarConta() {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Que tipo de conta deseja criar?");
-		System.out.println("1. Corrente");
-		System.out.println("2. Poupança");
-		System.out.println("3. Especial");
-		
-		return input.nextInt();
-	}
-	
-	public static int mensagemCriarContaG() {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Que tipo de conta deseja criar?");
-		System.out.println("1. Corrente");
-		System.out.println("2. Poupança");
-		System.out.println("3. Especial");
-		System.out.println("4. Gerente");
-		
-		return input.nextInt();
-	}
-
-	public static void infoConta(Conta Cconta) {
-		System.out.printf("\n Informações da conta \n");
-		System.out.printf("\nNome do cliente: %s\n", Cconta.getNome());
-		System.out.printf("Numero da conta: %d\n", Cconta.getNumeroConta());
-		System.out.println("Agradecemos a escolha de criar uma conta conosco.");	
-	}
 	
 	public static void criarContaC(Conta Cconta, int nCCliente, int gerente, String nome) {///Cria conta Corrente
 		///Menu CriarConta
@@ -62,7 +35,6 @@ public class MenuPrincipal extends JFrame {
 			Cconta.setNumeroConta(100+nCCliente);
 			Cconta.setNome(nome);
 			Cconta.setgQueCadastrou(gerente);
-			System.out.println("Conta Criada");
 			JOptionPane.showMessageDialog(null, "Número da Conta: " + Cconta.getNumeroConta() + ".  \nCadastro bem sucedido");
 	}
 	
@@ -73,7 +45,6 @@ public class MenuPrincipal extends JFrame {
 			Cconta.setNome(nome);
 			Cconta.alterarSenha("default", senha);
 			Cconta.setgQueCadastrou(gerente);
-			System.out.println("Conta Criada");
 			JOptionPane.showMessageDialog(null, "Número da Conta: " + Cconta.getNumeroConta() + ".   \nCadastro bem sucedido");
 	}
 
@@ -608,7 +579,8 @@ public class MenuPrincipal extends JFrame {
 	
 	///Validacao
 	JPanel validacao = new JPanel();
-	JLabel labelLogin = new JLabel("Login: ");
+	JLabel labelLogin = new JLabel("Nº Usuario: ");
+	JLabel labelLoginN = new JLabel("Nome: ");
 	JLabel labelSenha = new JLabel("Senha: ");
 	JTextField numConta = new JTextField(10);
 	JPasswordField senhaConta = new JPasswordField(10);
@@ -621,9 +593,9 @@ public class MenuPrincipal extends JFrame {
 	
 	///Menu Gerente
 	JPanel menuGerentePainel = new JPanel();
-	String[] opcoesMenuGerente = new String[] {"Selecione uma opção","Verificar o nom...","Visualizar info...", "Faz uma aplicaç...", 
-												"Faz transferênc...", "Faz retiradas m...", "Cadastra/Edita ...",
-												"Cadastrar outro...", "Alterar Senha"};
+	String[] opcoesMenuGerente = new String[] {"Selecione uma opção","Verificar o nom...","Visualizar info...", "Aplicar Dinheiro", 
+												"Transferências", "Retirar Dinheiro", "Editar Lim/Juros",
+												"Criar Usuarios", "Alterar Senha"};
 	
 	JComboBox menuGerente = new JComboBox(opcoesMenuGerente);
 	
@@ -636,7 +608,7 @@ public class MenuPrincipal extends JFrame {
 	
 	///Criar Conta
 	JPanel menuCriarContaPainel = new JPanel();
-	JLabel labelNome = new JLabel("Nome de Usuário: ");
+	JLabel labelNome = new JLabel("Nome da Conta: ");
 	JTextField txtNome = new JTextField(10);
 	JPasswordField senhaConta2 = new JPasswordField(10);
 	String[] tipodeconta = new String[] {"Selecione o tipo de Conta","Corrente", "Poupança", "Especial"};
@@ -800,7 +772,7 @@ case 7:///cadastrar outros usuarios
 				if(opcao==0){
 					switch (opcao2) {
 					case 1:///criar conta OK
-						validacao2.add(labelLogin);
+						validacao2.add(labelLoginN);
 						validacao2.add(numConta2);
 						validacao2.add(labelSenha);
 						validacao2.add(senhaConta3);
