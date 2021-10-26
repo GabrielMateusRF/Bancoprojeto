@@ -18,10 +18,10 @@ public class MenuPrincipal extends JFrame {
 		return 99;
 	}
 	
-    public static int acharUsuario(Usuario CUsuario[], int numConta, int i) {///funcao generica que devolve a posicao vetorial da conta
+    public static int acharUsuario(Usuario CUsuario[], String nomeConta, int i) {///funcao generica que devolve a posicao vetorial da conta
         int a;
         for(a=0; a<i; a++) {
-            if(CUsuario[a].getNum()==numConta) {
+            if(CUsuario[a].getNome().equals(nomeConta)) {
                 return a;
             }
         }
@@ -266,7 +266,7 @@ public class MenuPrincipal extends JFrame {
 		
 	public static void mudarSenha(Conta Cconta[], int key, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
 		JPanel menuAlterarSenhaPainel = new JPanel();
-		JLabel labelLogin = new JLabel("Número da conta: ");
+		JLabel labelLogin = new JLabel("Nome de usuário: ");
 		JLabel labelSenha = new JLabel("Senha: ");
 		JLabel labelSenha2 = new JLabel("Nova senha: ");
 		JTextField txtNome = new JTextField(10);
@@ -298,16 +298,16 @@ public class MenuPrincipal extends JFrame {
 	
 	
 	
-	public static void mudarSenha2(Usuario CUsuario[], int key, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
+	public static void mudarSenha2(Usuario CUsuario[], String key, int nCCliente) {///Consultar saldo tbm precisa de senha? Yup
 		JPanel menuAlterarSenhaPainel = new JPanel();
-		JLabel labelLogin = new JLabel("Número do Usuário: ");
+		JLabel labelLogin = new JLabel("Nome de Usuário: ");
 		JLabel labelSenha = new JLabel("Senha: ");
 		JLabel labelSenha2 = new JLabel("Nova senha: ");
 		JTextField txtNome = new JTextField(10);
 		JPasswordField senhaConta = new JPasswordField(10);
 		JPasswordField senhaConta2 = new JPasswordField(10);
 		String[] opcoes = new String[]{"Confirmar", "Fechar"};
-		int opcao;
+		int opcao, keyi;
 		
 		menuAlterarSenhaPainel.add(labelLogin);
 		menuAlterarSenhaPainel.add(txtNome);
@@ -320,10 +320,10 @@ public class MenuPrincipal extends JFrame {
 		opcao = JOptionPane.showOptionDialog(null, menuAlterarSenhaPainel, "Alterar Senha", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, opcoes, opcoes[1]);
 		
 		if(opcao == 0) {
-			key=Integer.parseInt(txtNome.getText());
-			key=acharUsuario(CUsuario, key, nCCliente);
-			if(key!=99) {
-				CUsuario[key].alterarSenha(String.valueOf(senhaConta.getPassword()), String.valueOf(senhaConta2.getPassword()));
+			key=String.valueOf(txtNome.getText());
+			keyi=acharUsuario(CUsuario, key, nCCliente);
+			if(keyi!=99) {
+				CUsuario[keyi].alterarSenha(String.valueOf(senhaConta.getPassword()), String.valueOf(senhaConta2.getPassword()));
 			}else {
 				JOptionPane.showMessageDialog(null, "Conta não encontrada");
 			}
@@ -604,7 +604,7 @@ public class MenuPrincipal extends JFrame {
 	
 	int key, contaKey, contaGerenteAtiva, contaUsuarioAtiva, nCCliente=0, nCGerente=1, nUsuario=0, opcao, opcao2, temp;
 
-	String senha;
+	String senha, keys;
 	
 	///Validacao
 	JPanel validacao = new JPanel();
@@ -809,8 +809,8 @@ case 7:///cadastrar outros usuarios
 						if(opcao==0) {
 							///NUMERO DA CONTA
 							
-							contaKey = Integer.parseInt(numConta2.getText());
-							contaUsuarioAtiva=acharUsuario(CUsuario, contaKey, nUsuario);
+							keys = String.valueOf(numConta2.getText());
+							contaUsuarioAtiva=acharUsuario(CUsuario, keys, nUsuario);
 							
 							if(contaUsuarioAtiva==99) {
 								JOptionPane.showMessageDialog(null, "Conta não encontrada");
@@ -878,8 +878,8 @@ case 7:///cadastrar outros usuarios
 						if(opcao==0) {
 							///NUMERO DA CONTA
 							
-							contaKey = Integer.parseInt(numConta2.getText());
-							contaUsuarioAtiva=acharUsuario(CUsuario, contaKey, nUsuario);
+							keys = String.valueOf(numConta2.getText());
+							contaUsuarioAtiva=acharUsuario(CUsuario, keys, nUsuario);
 							
 							if(contaUsuarioAtiva==99) {
 								JOptionPane.showMessageDialog(null, "Conta não encontrada");
@@ -911,8 +911,8 @@ case 7:///cadastrar outros usuarios
 						if(opcao==0) {
 							///NUMERO DA CONTA
 							
-							contaKey = Integer.parseInt(numConta2.getText());
-							contaUsuarioAtiva=acharUsuario(CUsuario, contaKey, nUsuario);
+							keys = String.valueOf(numConta2.getText());
+							contaUsuarioAtiva=acharUsuario(CUsuario, keys, nUsuario);
 							
 							if(contaUsuarioAtiva==99) {
 								JOptionPane.showMessageDialog(null, "Conta não encontrada");
@@ -940,7 +940,7 @@ case 7:///cadastrar outros usuarios
 						
 					case 6:///alterar senha OK
 						
-						mudarSenha2(CUsuario, key, nUsuario);
+						mudarSenha2(CUsuario, keys, nUsuario);
 						break;
 						
 					default:
